@@ -1,18 +1,18 @@
 import React from 'react';
 
-import { FormsifyProviderProps } from '../types/components';
+import { FormityProviderProps } from '../types/components';
 
-import FormsifyContext from '../context/formsify-context';
+import FormityContext from '../context/formity-context';
 
 /**
  * It is the component to provide the context.
  */
-function FormsifyProvider({ components, children }: FormsifyProviderProps) {
+function FormityProvider({ components, children }: FormityProviderProps) {
   return (
-    <FormsifyContext.Provider value={{ components }}>
+    <FormityContext.Provider value={{ components }}>
       {children}
-    </FormsifyContext.Provider>
+    </FormityContext.Provider>
   );
 }
 
-export default FormsifyProvider;
+export default FormityProvider;

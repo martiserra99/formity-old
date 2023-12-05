@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
-import { FormsifyContextValue } from '../types/context';
+import { FormityContextValue } from '../types/context';
 
-const FormsifyContext = createContext<FormsifyContextValue | null>(null);
+const FormityContext = createContext<FormityContextValue | null>(null);
 
-export default FormsifyContext;
+export default FormityContext;

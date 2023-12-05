@@ -1,13 +1,13 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 
-import FormsifyFormContext from "../context/formsify-form-context";
+import FormityFormContext from '../context/formity-form-context';
 
-function useFormsifyForm() {
-  const context = useContext(FormsifyFormContext);
+function useFormityForm() {
+  const context = useContext(FormityFormContext);
   if (!context) {
-    throw new Error("useFormsifyForm must be used within a FormsifyForm");
+    throw new Error('useFormityForm must be used within a FormityForm');
   }
   return context;
 }
 
-export default useFormsifyForm;
+export default useFormityForm;

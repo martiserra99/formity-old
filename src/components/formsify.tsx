@@ -2,17 +2,17 @@ import React, { useMemo, useState } from 'react';
 
 import { Object as Obj, Value } from 'mongu';
 
-import { FormsifyProps } from '../types/components';
+import { FormityProps } from '../types/components';
 
 import Form from '../classes/form';
 import { PointForm } from '../classes/point';
 
-import useResolver from '../hooks/formsify/use-resolver';
-import useRender from '../hooks/formsify/use-render';
+import useResolver from '../hooks/formity/use-resolver';
+import useRender from '../hooks/formity/use-render';
 
-import FormsifyForm from '../components/formsify-form';
+import FormityForm from '../components/formity-form';
 
-function Formsify({ json, onSubmit, className }: FormsifyProps) {
+function Formity({ json, onSubmit, className }: FormityProps) {
   const form = useMemo(() => new Form(json), [json]);
 
   const [points, setPoints] = useState(() => [form.initial()]);
@@ -38,7 +38,7 @@ function Formsify({ json, onSubmit, className }: FormsifyProps) {
   }
 
   return (
-    <FormsifyForm
+    <FormityForm
       defaultValues={defaultValues}
       resolver={resolver}
       onSubmit={handleSubmit}
@@ -47,8 +47,8 @@ function Formsify({ json, onSubmit, className }: FormsifyProps) {
       key={points.length}
     >
       {render}
-    </FormsifyForm>
+    </FormityForm>
   );
 }
 
-export default Formsify;
+export default Formity;

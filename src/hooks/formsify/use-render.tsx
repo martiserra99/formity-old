@@ -1,14 +1,14 @@
 import React, { ReactNode } from 'react';
 
 import { ValueForm } from '../../types/value';
-import { FormsifyContextValue } from '../../types/context';
+import { FormityContextValue } from '../../types/context';
 
-import useFormsify from '../use-formsify';
+import useFormity from '../use-formity';
 
-type Components = FormsifyContextValue['components'];
+type Components = FormityContextValue['components'];
 
 function useRender(form: ValueForm): ReactNode {
-  const { components } = useFormsify();
+  const { components } = useFormity();
   return toJSX(form.render, components) as ReactNode;
 }
 

@@ -1,9 +1,9 @@
 import { ElementType } from 'react';
 
-export interface FormsifyContextValue {
+export interface FormityContextValue {
   components: { [key: string]: ElementType };
 }
 
-export interface FormsifyFormContextValue {
+export interface FormityFormContextValue {
   onBack: () => void;
 }

@@ -3,11 +3,11 @@ import { ReactNode } from 'react';
 import { UseFormProps } from 'react-hook-form';
 
 import { JsonList } from './json';
-import { FormsifyContextValue } from './context';
+import { FormityContextValue } from './context';
 
-export type Components = FormsifyContextValue['components'];
+export type Components = FormityContextValue['components'];
 
-export interface FormsifyProviderProps {
+export interface FormityProviderProps {
   components: Components;
   children: ReactNode;
 }
@@ -15,13 +15,13 @@ export interface FormsifyProviderProps {
 export type Json = JsonList;
 export type Result = Value;
 
-export interface FormsifyProps {
+export interface FormityProps {
   json: Json;
   onSubmit: (result: Result) => void;
   className?: string;
 }
 
-export interface FormsifyFormProps {
+export interface FormityFormProps {
   defaultValues: UseFormProps['defaultValues'];
   resolver: UseFormProps['resolver'];
   onSubmit: (values: Obj<Value>) => void;

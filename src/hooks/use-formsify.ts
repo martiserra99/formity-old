@@ -1,20 +1,18 @@
 import { useContext } from 'react';
 
-import { FormsifyContextValue } from '../types/context';
+import { FormityContextValue } from '../types/context';
 
-import FormsifyContext from '../context/formsify-context';
+import FormityContext from '../context/formity-context';
 
 /**
  * It is the hook to get the context.
  */
-function useFormsify(): FormsifyContextValue {
-  const value = useContext(FormsifyContext);
+function useFormity(): FormityContextValue {
+  const value = useContext(FormityContext);
   if (value === null) {
-    throw new Error(
-      'useFormsifyContext must be used within a FormsifyProvider'
-    );
+    throw new Error('useFormityContext must be used within a FormityProvider');
   }
   return value;
 }
 
-export default useFormsify;
+export default useFormity;

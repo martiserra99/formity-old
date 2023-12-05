@@ -1,5 +1,5 @@
-export { FormsifyProviderProps, Components } from './types/components';
-export { FormsifyProps, Json, Result } from './types/components';
-export { default as FormsifyProvider } from './components/formsify-provider';
-export { default as Formsify } from './components/formsify';
-export { default as useFormsifyForm } from './hooks/use-formsify-form';
+export { FormityProviderProps, Components } from './types/components';
+export { FormityProps, Json, Result } from './types/components';
+export { default as FormityProvider } from './components/formity-provider';
+export { default as Formity } from './components/formity';
+export { default as useFormityForm } from './hooks/use-formity-form';

@@ -2,25 +2,25 @@ import React from 'react';
 
 import { useForm, FormProvider } from 'react-hook-form';
 
-import { FormsifyFormProps } from '../types/components';
+import { FormityFormProps } from '../types/components';
 
-import FormsifyFormContext from '../context/formsify-form-context';
+import FormityFormContext from '../context/formity-form-context';
 
 /**
  * It is the form component.
  */
-function FormsifyForm({
+function FormityForm({
   defaultValues,
   resolver,
   onSubmit,
   onBack,
   children,
   className,
-}: FormsifyFormProps) {
+}: FormityFormProps) {
   const form = useForm({ defaultValues, resolver });
   return (
     <FormProvider {...form}>
-      <FormsifyFormContext.Provider value={{ onBack }}>
+      <FormityFormContext.Provider value={{ onBack }}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className={className}
@@ -28,9 +28,9 @@ function FormsifyForm({
         >
           {children}
         </form>
-      </FormsifyFormContext.Provider>
+      </FormityFormContext.Provider>
     </FormProvider>
   );
 }
 
-export default FormsifyForm;
+export default FormityForm;
