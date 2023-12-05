@@ -10,7 +10,7 @@ import { PointForm } from '../classes/point';
 import useResolver from '../hooks/formity/use-resolver';
 import useRender from '../hooks/formity/use-render';
 
-import FormityForm from '../components/formity-form';
+import FormityForm from './formity-form';
 
 function Formity({ json, onSubmit, className }: FormityProps) {
   const form = useMemo(() => new Form(json), [json]);
