@@ -10,9 +10,9 @@ npm install --save formity
 
 ## ❯ Overview
 
-This library lets you create advanced dynamic forms for React applications. The forms that you can create using this library can have multiple steps and the questions asked in each step can depend on the answers provided on the previous ones.
+This library lets you create advanced dynamic forms for React applications. The forms that you can create using this library can have multiple steps, and the questions asked in each step can depend on the answers provided in the previous ones.
 
-These forms are created using only json objects providing you with some capabilities you wouldn't have otherwise. You can store them as json files, send them through the network and even store them in a database like MongoDB.
+These forms are created using only json objects, providing you with some capabilities you wouldn't have otherwise. You can store them as json files, send them through the network and even store them in a database like MongoDB.
 
 ## ❯ Example
 
@@ -62,7 +62,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 );
 ```
 
-You can define as many components as you want but the form fields need to meet certain requirements. This library uses [react-hook-form](https://www.npmjs.com/package/react-hook-form) under the hood and a form context is provided. For that reason you need to make sure that your form fields are registered to this form, like so:
+You can define as many components as you want, but the form fields need to meet certain requirements. This library uses [react-hook-form](https://www.npmjs.com/package/react-hook-form) under the hood and a form context is provided. For that reason, you need to make sure that your form fields are registered to this form, like so:
 
 ```js
 import { useFormContext } from 'react-hook-form';
@@ -90,7 +90,7 @@ function TextField({ label, name, placeholder }) {
 // ...
 ```
 
-You can take a look at the components of the example to give you a better idea about how these components can be defined. These are creatd using [radix-ui](https://www.radix-ui.com/) and you can reuse them and modify them as you want.
+You can take a look at the components of the example to give you a better idea about how these components can be defined. These are created using [radix-ui](https://www.radix-ui.com/), and you can reuse them and modify them as you want.
 
 ### Formity
 
@@ -127,13 +127,13 @@ The json that defines the form has to be an array of elements that can be of dif
 
 #### form
 
-The form element is an object with the following syntax:
+The _form_ element is an object with the following syntax:
 
 ```json
 { "form": "expression" }
 ```
 
-`"expression"` is a mongu expression that has to resolve to an object with these properties:
+The `"expression"` of the element is a mongu expression that has to resolve to an object with these properties:
 
 ```json
 {
@@ -281,13 +281,13 @@ This is an example:
 
 #### return
 
-The return element is an object with the following syntax:
+The _return_ element is an object with the following syntax:
 
 ```json
 { "return": "expression" }
 ```
 
-`"expression"` is a mongu expression that can resolve to any value.
+The `"expression"` of the element is a mongu expression that can resolve to any value.
 
 This is an example:
 
@@ -345,13 +345,13 @@ This is an example:
 
 #### variables
 
-The variables element is an object with the following syntax:
+The _variables_ element is an object with the following syntax:
 
 ```json
 { "variables": "expression" }
 ```
 
-`"expression"` is a mongu expression that has to resolve to an object like this:
+The `"expression"` of the element is a mongu expression that has to resolve to an object like this:
 
 ```json
 {
@@ -424,7 +424,7 @@ This is an example:
 
 #### cond
 
-The cond element is an object with the following syntax:
+The _cond_ element is an object with the following syntax:
 
 ```json
 {
@@ -534,7 +534,7 @@ This is an example:
 
 #### loop
 
-The loop element is an object with the following syntax:
+The _loop_ element is an object with the following syntax:
 
 ```json
 {
