@@ -631,3 +631,106 @@ This is an example:
   }
 ]
 ```
+
+### Back
+
+To add the functionality to go back we have to create a component that uses the `useFormityForm` hook. This hook returns an `onBack` function that we can use to go back:
+
+```js
+import { useFormityForm } from 'formity';
+
+import { Button } from '@radix-ui/themes';
+
+export default function Back({ children }) {
+  const { onBack } = useFormityForm();
+  return (
+    <Button type="button" variant="outline" onClick={onBack}>
+      {children}
+    </Button>
+  );
+}
+```
+
+This is an example:
+
+```json
+[
+  {
+    "form": {
+      "defaultValues": {
+        "name": ""
+      },
+      "resolver": {
+        "name": [[{ "_$ne": ["_$name", ""] }, "Required"]]
+      },
+      "render": [
+        {
+          "LayoutForm": {
+            "heading": "What is your name?",
+            "text": "Fill in your name",
+            "fields": [
+              {
+                "TextField": {
+                  "name": "name",
+                  "label": "Name",
+                  "placeholder": "Enter your name"
+                }
+              }
+            ],
+            "buttons": [
+              {
+                "Button": {
+                  "type": "submit",
+                  "children": "Next"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "form": {
+      "defaultValues": {
+        "age": 24
+      },
+      "resolver": {},
+      "render": [
+        {
+          "LayoutForm": {
+            "heading": "What is your age?",
+            "text": "Select your age",
+            "fields": [
+              {
+                "Slider": {
+                  "name": "age",
+                  "label": "Age",
+                  "min": 1,
+                  "max": 100,
+                  "step": 1
+                }
+              }
+            ],
+            "buttons": [
+              { "Back": { "children": "Back" } },
+              {
+                "Button": {
+                  "type": "submit",
+                  "children": "Next"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "return": {
+      "name": "$name",
+      "age": "$age"
+    }
+  }
+]
+```
