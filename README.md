@@ -533,3 +533,101 @@ This is an example:
   }
 ]
 ```
+
+#### loop
+
+The loop element is an object with the following syntax:
+
+```json
+{
+  "loop": {
+    "while": "expression",
+    "do": ["element", "element", "..."]
+  }
+}
+```
+
+The `"expression"` of `"while"` is a mongu expression that has to resolve to a boolean. While the boolean is true, the elements inside `"do"` will be used.
+
+This is an example:
+
+```json
+[
+  {
+    "variables": {
+      "i": 0,
+      "questions": [
+        { "question": "Do you like football?", "value": "football" },
+        { "question": "Do you like basketball?", "value": "basketball" },
+        { "question": "Do you like tennis?", "value": "tennis" }
+      ],
+      "sports": []
+    }
+  },
+  {
+    "loop": {
+      "while": { "$lt": ["$i", { "$size": "$questions" }] },
+      "do": [
+        {
+          "variables": {
+            "question": { "$arrayElemAt": ["$questions", "$i"] }
+          }
+        },
+        {
+          "form": {
+            "defaultValues": {
+              "like": "yes"
+            },
+            "resolver": {},
+            "render": [
+              {
+                "LayoutForm": {
+                  "heading": "$question.question",
+                  "text": "Select if you like it or not",
+                  "fields": [
+                    {
+                      "Select": {
+                        "name": "like",
+                        "label": "Do you like it?",
+                        "list": [
+                          { "label": "Yes", "value": "yes" },
+                          { "label": "No", "value": "no" }
+                        ]
+                      }
+                    }
+                  ],
+                  "buttons": [
+                    {
+                      "Button": {
+                        "type": "submit",
+                        "children": "Next"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "variables": {
+            "sports": {
+              "$cond": {
+                "if": { "$eq": ["$like", "yes"] },
+                "then": { "$concatArrays": ["$sports", ["$question.value"]] },
+                "else": "$sports"
+              }
+            },
+            "i": { "$add": ["$i", 1] }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "return": {
+      "sports": "$sports"
+    }
+  }
+]
+```
