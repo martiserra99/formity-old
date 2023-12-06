@@ -357,8 +357,8 @@ The variables element is an object with the following syntax:
 
 ```json
 {
-  "variable_1": "value_1",
-  "variable_2": "value_2",
+  "variable": "value",
+  "variable": "value",
   "...": "..."
 }
 ```
@@ -420,6 +420,116 @@ This is an example:
   },
   {
     "return": "$fullName"
+  }
+]
+```
+
+#### cond
+
+The cond element is an object with the following syntax:
+
+```json
+{
+  "cond": {
+    "if": "expression",
+    "then": ["element", "element", "..."],
+    "else": ["element", "element", "..."]
+  }
+}
+```
+
+The `"expression"` of `"if"` is a mongu expression that has to resolve to a boolean. If the boolean is true, the elements inside `"then"` will be used. If that is not the case the elements inside `"else"` will be used.
+
+This is an example:
+
+```json
+[
+  {
+    "form": {
+      "defaultValues": {
+        "age": 25
+      },
+      "resolver": {},
+      "render": [
+        {
+          "LayoutForm": {
+            "heading": "What is your age?",
+            "text": "Select your age",
+            "fields": [
+              {
+                "Slider": {
+                  "name": "age",
+                  "label": "Age",
+                  "min": 1,
+                  "max": 100,
+                  "step": 1
+                }
+              }
+            ],
+            "buttons": [
+              { "Back": { "children": "Back" } },
+              {
+                "Button": {
+                  "type": "submit",
+                  "children": "Next"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "cond": {
+      "if": { "$gte": ["$age", 18] },
+      "then": [
+        {
+          "form": {
+            "defaultValues": {
+              "drivingLicense": false
+            },
+            "resolver": {},
+            "render": [
+              {
+                "LayoutForm": {
+                  "heading": "Do you have a driving license?",
+                  "text": "Select your answer",
+                  "fields": [
+                    {
+                      "RadioGroup": {
+                        "name": "drivingLicense",
+                        "label": "Driving license",
+                        "list": [
+                          { "value": false, "label": "No" },
+                          { "value": true, "label": "Yes" }
+                        ]
+                      }
+                    }
+                  ],
+                  "buttons": [
+                    { "Back": { "children": "Back" } },
+                    {
+                      "Button": {
+                        "type": "submit",
+                        "children": "Next"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "else": [{ "variables": { "drivingLicense": false } }]
+    }
+  },
+  {
+    "return": {
+      "age": "$age",
+      "drivingLicense": "$drivingLicense"
+    }
   }
 ]
 ```
