@@ -1,6 +1,6 @@
 # formity
 
-Create dynamic react forms with just a json.
+Create dynamic React forms with just a json.
 
 ## ❯ Install
 
