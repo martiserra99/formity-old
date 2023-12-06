@@ -119,15 +119,11 @@ function App() {
 
 The json that defines the form has to be an array of elements that can be of different types. The type of elements that exist are:
 
-- **form**: A step in the form.
-
-- **return**: What the form returns.
-
-- **variables**: Variables to use next.
-
-- **cond**: Condition to define what to do.
-
-- **loop**: Loop to define what to repeat.
+- _form_: A step in the form.
+- _return_: What the form returns.
+- _variables_: Variables to use next.
+- _cond_: Condition to define what to do.
+- _loop_: Loop to define what to repeat.
 
 #### form
 
@@ -154,8 +150,9 @@ The `defaultValues` property defines the default values of the form:
   "defaultValues": {
     "name": "Marti",
     "age": 24
-  }
-  // ...
+  },
+  "resolver": "...",
+  "render": "..."
 }
 ```
 
@@ -163,14 +160,14 @@ The `resolver` property defines the validations of the form:
 
 ```json
 {
-  // ...
+  "defaultValues": "...",
   "resolver": {
     "name": [
       [{ "$ne": ["$name", ""] }, "Required"],
       [{ "$lt": [{ "$strLen": "$name" }, 20] }, "No more than 20 chars"]
     ]
-  }
-  // ...
+  },
+  "render": "..."
 }
 ```
 
@@ -180,7 +177,8 @@ The `render` property defines the components that are rendered:
 
 ```json
 {
-  // ...
+  "defaultValues": "...",
+  "resolver": "...",
   "render": [
     {
       "LayoutForm": {
