@@ -465,7 +465,6 @@ This is an example:
               }
             ],
             "buttons": [
-              { "Back": { "children": "Back" } },
               {
                 "Button": {
                   "type": "submit",
