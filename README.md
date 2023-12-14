@@ -1,6 +1,6 @@
 # formity
 
-Create dynamic React forms with just a json.
+Create dynamic React forms with just a JSON.
 
 ## ❯ Install
 
@@ -12,7 +12,7 @@ npm install --save formity
 
 This library lets you create advanced dynamic forms for React applications. The forms that you can create using this library can have multiple steps, and the questions asked in each step can depend on the answers provided in the previous ones.
 
-These forms are created using only json objects, providing you with some capabilities you wouldn't have otherwise. You can store them as json files, send them through the network and even store them in a database like MongoDB.
+These forms are created using only JSON objects, providing you with some capabilities you wouldn't have otherwise. You can store them as JSON files, send them through the network and even store them in a database like MongoDB.
 
 ## ❯ Example
 
@@ -53,7 +53,7 @@ const components = {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Theme panelBackground="translucent">
+    <Theme appearance="dark" panelBackground="translucent">
       <FormityProvider components={components}>
         <App />
       </FormityProvider>
@@ -94,7 +94,7 @@ You can take a look at the components of the example to give you a better idea a
 
 ### Formity
 
-Once you have provided these components using the `FormityProvider` component, you can start to create a form. To be able to do it you have to use the `Formity` component, and you have to provide a json that defines the form and a callback that will be called when the form is submitted:
+Once you have provided these components using the `FormityProvider` component, you can start to create a form. To be able to do it you have to use the `Formity` component, and you have to provide a JSON that defines the form and a callback that will be called when the form is submitted:
 
 ```js
 // ...
@@ -115,9 +115,9 @@ function App() {
 // ...
 ```
 
-### Json
+### JSON
 
-The json that defines the form has to be an array of elements that can be of different types. The type of elements that exist are:
+The JSON that defines the form has to be an array of elements that can be of different types. The type of elements that exist are:
 
 - _form_: A step in the form.
 - _return_: What the form returns.
