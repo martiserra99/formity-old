@@ -1,4 +1,4 @@
-import { Object as Obj, Value } from 'mongu';
+import { Object, Value } from 'mongu';
 import { ReactNode } from 'react';
 import { UseFormProps } from 'react-hook-form';
 
@@ -24,7 +24,7 @@ export interface FormityProps {
 export interface FormityFormProps {
   defaultValues: UseFormProps['defaultValues'];
   resolver: UseFormProps['resolver'];
-  onSubmit: (values: Obj<Value>) => void;
+  onSubmit: (values: Object<Value>) => void;
   onBack: () => void;
   children: ReactNode;
   className?: string;

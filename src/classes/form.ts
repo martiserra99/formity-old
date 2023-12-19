@@ -1,4 +1,4 @@
-import { Object as Obj, Value } from 'mongu';
+import { Object, Value } from 'mongu';
 
 import { JsonList } from '../types/json';
 import { Position } from '../types/position';
@@ -36,7 +36,7 @@ class Form {
    * @param values The values.
    * @returns The current and the next point.
    */
-  next(point: PointForm, values: Obj<Value>): [PointForm, PointStop] {
+  next(point: PointForm, values: Object<Value>): [PointForm, PointStop] {
     const currPoint = point.defaultValues(values);
     const nextPoint = this._nextStop(this._nextStep(currPoint.add(values)));
     return [currPoint, nextPoint];
@@ -77,7 +77,7 @@ class Form {
 
   _nextVariables(point: Point): Point {
     return point instanceof PointVariables
-      ? point.add(point.value as Obj<Value>)
+      ? point.add(point.value as Object<Value>)
       : point;
   }
 

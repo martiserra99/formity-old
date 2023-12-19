@@ -1,4 +1,4 @@
-import { Object as Obj, Value } from 'mongu';
+import { Object, Value } from 'mongu';
 
 import { mongu } from 'mongu';
 
@@ -40,7 +40,7 @@ export abstract class Navigate<
    */
   static down(
     element: ElementFlow,
-    variables: Obj<Value> = {}
+    variables: Object<Value> = {}
   ): Position | null {
     return Navigate.create(element).down(variables);
   }
@@ -55,14 +55,14 @@ export abstract class Navigate<
   static next(
     element: ElementFlow,
     position: Position,
-    variables: Obj<Value> = {}
+    variables: Object<Value> = {}
   ): Position | null {
     return Navigate.create(element).next(position, variables);
   }
 
-  protected abstract down(variables: Obj<Value>): U | null;
+  protected abstract down(variables: Object<Value>): U | null;
 
-  protected abstract next(position: U, variables: Obj<Value>): U | null;
+  protected abstract next(position: U, variables: Object<Value>): U | null;
 }
 
 /**
@@ -84,7 +84,7 @@ export class NavigateList extends Navigate<ElementList, PositionList> {
  * It defines logic to navigate through a conditional.
  */
 export class NavigateCond extends Navigate<ElementCond, PositionCond> {
-  protected down(variables: Obj<Value>): PositionCond | null {
+  protected down(variables: Object<Value>): PositionCond | null {
     if (mongu(this.element.cond, variables)) {
       if (this.element.thenLength > 0) return ['then', 0];
     } else {
@@ -109,7 +109,7 @@ export class NavigateCond extends Navigate<ElementCond, PositionCond> {
  * It defines logic to navigate through a loop.
  */
 export class NavigateLoop extends Navigate<ElementLoop, PositionLoop> {
-  protected down(variables: Obj<Value>): PositionLoop | null {
+  protected down(variables: Object<Value>): PositionLoop | null {
     if (mongu(this.element.cond, variables)) {
       if (this.element.length > 0) return 0;
     }
@@ -118,7 +118,7 @@ export class NavigateLoop extends Navigate<ElementLoop, PositionLoop> {
 
   protected next(
     position: PositionLoop,
-    variables: Obj<Value>
+    variables: Object<Value>
   ): PositionLoop | null {
     if (position < this.element.length - 1) return position + 1;
     if (mongu(this.element.cond, variables)) return 0;

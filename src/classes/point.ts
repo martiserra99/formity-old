@@ -1,4 +1,4 @@
-import { Object as Obj, Value } from 'mongu';
+import { Object, Value } from 'mongu';
 
 import { mongu } from 'mongu';
 
@@ -20,9 +20,9 @@ import {
  */
 export abstract class Point {
   public positions: Position[];
-  public variables: Obj<Value>;
+  public variables: Object<Value>;
 
-  constructor(positions: Position[], variables: Obj<Value>) {
+  constructor(positions: Position[], variables: Object<Value>) {
     this.positions = positions;
     this.variables = variables;
   }
@@ -38,7 +38,7 @@ export abstract class Point {
   static create(
     elementFlow: ElementFlow,
     positions: Position[],
-    variables: Obj<Value> = {}
+    variables: Object<Value> = {}
   ): Point {
     const element = elementFlow.get(positions);
 
@@ -63,7 +63,7 @@ export abstract class Point {
     throw new Error('Invalid element');
   }
 
-  abstract add(variables: Obj<Value>): Point;
+  abstract add(variables: Object<Value>): Point;
 }
 
 /**
@@ -78,12 +78,12 @@ export class PointList extends PointFlow {
   static new(
     _: ElementList,
     positions: Position[],
-    variables: Obj<Value>
+    variables: Object<Value>
   ): PointList {
     return new PointList(positions, variables);
   }
 
-  add(variables: Obj<Value>): PointList {
+  add(variables: Object<Value>): PointList {
     return new PointList(this.positions, {
       ...this.variables,
       ...variables,
@@ -98,12 +98,12 @@ export class PointCond extends PointFlow {
   static new(
     _: ElementCond,
     positions: Position[],
-    variables: Obj<Value>
+    variables: Object<Value>
   ): PointCond {
     return new PointCond(positions, variables);
   }
 
-  add(variables: Obj<Value>): PointCond {
+  add(variables: Object<Value>): PointCond {
     return new PointCond(this.positions, {
       ...this.variables,
       ...variables,
@@ -118,12 +118,12 @@ export class PointLoop extends PointFlow {
   static new(
     _: ElementLoop,
     positions: Position[],
-    variables: Obj<Value>
+    variables: Object<Value>
   ): PointLoop {
     return new PointLoop(positions, variables);
   }
 
-  add(variables: Obj<Value>): PointLoop {
+  add(variables: Object<Value>): PointLoop {
     return new PointLoop(this.positions, {
       ...this.variables,
       ...variables,
@@ -135,7 +135,11 @@ export class PointLoop extends PointFlow {
  * It is a point that represents an item.
  */
 export abstract class PointItem<T> extends Point {
-  constructor(public value: T, positions: Position[], variables: Obj<Value>) {
+  constructor(
+    public value: T,
+    positions: Position[],
+    variables: Object<Value>
+  ) {
     super(positions, variables);
   }
 }
@@ -147,7 +151,7 @@ export class PointForm extends PointItem<ValueForm> {
   static new(
     element: ElementForm,
     positions: Position[],
-    variables: Obj<Value>
+    variables: Object<Value>
   ): PointForm {
     return new PointForm(
       mongu(element.value, variables) as ValueForm,
@@ -156,14 +160,14 @@ export class PointForm extends PointItem<ValueForm> {
     );
   }
 
-  add(variables: Obj<Value>): PointForm {
+  add(variables: Object<Value>): PointForm {
     return new PointForm(this.value, this.positions, {
       ...this.variables,
       ...variables,
     });
   }
 
-  defaultValues(values: Obj<Value>) {
+  defaultValues(values: Object<Value>) {
     const value = { ...this.value, defaultValues: values };
     return new PointForm(value, this.positions, this.variables);
   }
@@ -176,7 +180,7 @@ export class PointReturn extends PointItem<ValueReturn> {
   static new(
     element: ElementReturn,
     positions: Position[],
-    variables: Obj<Value>
+    variables: Object<Value>
   ): PointReturn {
     return new PointReturn(
       mongu(element.value, variables) as ValueReturn,
@@ -185,7 +189,7 @@ export class PointReturn extends PointItem<ValueReturn> {
     );
   }
 
-  add(variables: Obj<Value>): PointReturn {
+  add(variables: Object<Value>): PointReturn {
     return new PointReturn(this.value, this.positions, {
       ...this.variables,
       ...variables,
@@ -200,7 +204,7 @@ export class PointVariables extends PointItem<ValueVariables> {
   static new(
     element: ElementVariables,
     positions: Position[],
-    variables: Obj<Value>
+    variables: Object<Value>
   ): PointVariables {
     return new PointVariables(
       mongu(element.value, variables) as ValueVariables,
@@ -209,7 +213,7 @@ export class PointVariables extends PointItem<ValueVariables> {
     );
   }
 
-  add(variables: Obj<Value>): PointVariables {
+  add(variables: Object<Value>): PointVariables {
     return new PointVariables(this.value, this.positions, {
       ...this.variables,
       ...variables,
