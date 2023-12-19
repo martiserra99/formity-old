@@ -158,10 +158,7 @@ export class PointForm extends PointItem<ValueForm> {
 
   defaultValues(values: Obj<Value>) {
     const value = { ...this.value, defaultValues: values };
-    return new PointForm(value, this.positions, {
-      ...this.variables,
-      ...values,
-    });
+    return new PointForm(value, this.positions, this.variables);
   }
 }
 
