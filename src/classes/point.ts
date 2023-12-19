@@ -43,13 +43,13 @@ export abstract class Point {
     const element = elementFlow.get(positions);
 
     if (element instanceof ElementList)
-      return PointList.new(element, positions, variables);
+      return PointList.new(positions, variables);
 
     if (element instanceof ElementCond)
-      return PointCond.new(element, positions, variables);
+      return PointCond.new(positions, variables);
 
     if (element instanceof ElementLoop)
-      return PointLoop.new(element, positions, variables);
+      return PointLoop.new(positions, variables);
 
     if (element instanceof ElementForm)
       return PointForm.new(element, positions, variables);
@@ -63,7 +63,11 @@ export abstract class Point {
     throw new Error('Invalid element');
   }
 
-  abstract add(variables: Object<Value>): Point;
+  add(variables: Object<Value>): Point {
+    return this.set({ ...this.variables, ...variables });
+  }
+
+  protected abstract set(variables: Object<Value>): Point;
 }
 
 /**
@@ -75,19 +79,12 @@ export abstract class PointFlow extends Point {}
  * It is a point that represents a list.
  */
 export class PointList extends PointFlow {
-  static new(
-    _: ElementList,
-    positions: Position[],
-    variables: Object<Value>
-  ): PointList {
+  static new(positions: Position[], variables: Object<Value>): PointList {
     return new PointList(positions, variables);
   }
 
-  add(variables: Object<Value>): PointList {
-    return new PointList(this.positions, {
-      ...this.variables,
-      ...variables,
-    });
+  protected set(variables: Object<Value>): PointList {
+    return new PointList(this.positions, variables);
   }
 }
 
@@ -95,19 +92,12 @@ export class PointList extends PointFlow {
  * It is a point that represents a conditional.
  */
 export class PointCond extends PointFlow {
-  static new(
-    _: ElementCond,
-    positions: Position[],
-    variables: Object<Value>
-  ): PointCond {
+  static new(positions: Position[], variables: Object<Value>): PointCond {
     return new PointCond(positions, variables);
   }
 
-  add(variables: Object<Value>): PointCond {
-    return new PointCond(this.positions, {
-      ...this.variables,
-      ...variables,
-    });
+  protected set(variables: Object<Value>): PointCond {
+    return new PointCond(this.positions, variables);
   }
 }
 
@@ -115,19 +105,12 @@ export class PointCond extends PointFlow {
  * It is a point that represents a loop.
  */
 export class PointLoop extends PointFlow {
-  static new(
-    _: ElementLoop,
-    positions: Position[],
-    variables: Object<Value>
-  ): PointLoop {
+  static new(positions: Position[], variables: Object<Value>): PointLoop {
     return new PointLoop(positions, variables);
   }
 
-  add(variables: Object<Value>): PointLoop {
-    return new PointLoop(this.positions, {
-      ...this.variables,
-      ...variables,
-    });
+  protected set(variables: Object<Value>): PointLoop {
+    return new PointLoop(this.positions, variables);
   }
 }
 
@@ -153,23 +136,17 @@ export class PointForm extends PointItem<ValueForm> {
     positions: Position[],
     variables: Object<Value>
   ): PointForm {
-    return new PointForm(
-      mongu(element.value, variables) as ValueForm,
-      positions,
-      variables
-    );
-  }
-
-  add(variables: Object<Value>): PointForm {
-    return new PointForm(this.value, this.positions, {
-      ...this.variables,
-      ...variables,
-    });
+    const value = mongu(element.value, variables) as ValueForm;
+    return new PointForm(value, positions, variables);
   }
 
   defaultValues(values: Object<Value>) {
     const value = { ...this.value, defaultValues: values };
     return new PointForm(value, this.positions, this.variables);
+  }
+
+  protected set(variables: Object<Value>): PointForm {
+    return new PointForm(this.value, this.positions, variables);
   }
 }
 
@@ -182,18 +159,12 @@ export class PointReturn extends PointItem<ValueReturn> {
     positions: Position[],
     variables: Object<Value>
   ): PointReturn {
-    return new PointReturn(
-      mongu(element.value, variables) as ValueReturn,
-      positions,
-      variables
-    );
+    const value = mongu(element.value, variables) as ValueReturn;
+    return new PointReturn(value, positions, variables);
   }
 
-  add(variables: Object<Value>): PointReturn {
-    return new PointReturn(this.value, this.positions, {
-      ...this.variables,
-      ...variables,
-    });
+  protected set(variables: Object<Value>): PointReturn {
+    return new PointReturn(this.value, this.positions, variables);
   }
 }
 
@@ -206,17 +177,11 @@ export class PointVariables extends PointItem<ValueVariables> {
     positions: Position[],
     variables: Object<Value>
   ): PointVariables {
-    return new PointVariables(
-      mongu(element.value, variables) as ValueVariables,
-      positions,
-      variables
-    );
+    const value = mongu(element.value, variables) as ValueVariables;
+    return new PointVariables(value, positions, variables);
   }
 
-  add(variables: Object<Value>): PointVariables {
-    return new PointVariables(this.value, this.positions, {
-      ...this.variables,
-      ...variables,
-    });
+  protected set(variables: Object<Value>): PointVariables {
+    return new PointVariables(this.value, this.positions, variables);
   }
 }
