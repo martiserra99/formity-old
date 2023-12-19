@@ -41,18 +41,25 @@ export abstract class Point {
     variables: Obj<Value> = {}
   ): Point {
     const element = elementFlow.get(positions);
+
     if (element instanceof ElementList)
       return PointList.new(element, positions, variables);
+
     if (element instanceof ElementCond)
       return PointCond.new(element, positions, variables);
+
     if (element instanceof ElementLoop)
       return PointLoop.new(element, positions, variables);
+
     if (element instanceof ElementForm)
       return PointForm.new(element, positions, variables);
+
     if (element instanceof ElementReturn)
       return PointReturn.new(element, positions, variables);
+
     if (element instanceof ElementVariables)
       return PointVariables.new(element, positions, variables);
+
     throw new Error('Invalid element');
   }
 
