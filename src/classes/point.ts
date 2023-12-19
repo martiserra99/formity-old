@@ -18,7 +18,7 @@ import {
 /**
  * This class represents a point in the execution.
  */
-export abstract class Point {
+export abstract class Point<T = unknown> {
   public positions: Position[];
   public variables: Object<Value>;
 
@@ -63,22 +63,22 @@ export abstract class Point {
     throw new Error('Invalid element');
   }
 
-  add(variables: Object<Value>): Point {
+  add(variables: Object<Value>): T {
     return this.set({ ...this.variables, ...variables });
   }
 
-  protected abstract set(variables: Object<Value>): Point;
+  protected abstract set(variables: Object<Value>): T;
 }
 
 /**
  * It is a point that represents a flow.
  */
-export abstract class PointFlow extends Point {}
+export abstract class PointFlow<T = unknown> extends Point<T> {}
 
 /**
  * It is a point that represents a list.
  */
-export class PointList extends PointFlow {
+export class PointList extends PointFlow<PointList> {
   static new(positions: Position[], variables: Object<Value>): PointList {
     return new PointList(positions, variables);
   }
@@ -91,7 +91,7 @@ export class PointList extends PointFlow {
 /**
  * It is a point that represents a conditional.
  */
-export class PointCond extends PointFlow {
+export class PointCond extends PointFlow<PointCond> {
   static new(positions: Position[], variables: Object<Value>): PointCond {
     return new PointCond(positions, variables);
   }
@@ -104,7 +104,7 @@ export class PointCond extends PointFlow {
 /**
  * It is a point that represents a loop.
  */
-export class PointLoop extends PointFlow {
+export class PointLoop extends PointFlow<PointLoop> {
   static new(positions: Position[], variables: Object<Value>): PointLoop {
     return new PointLoop(positions, variables);
   }
@@ -117,9 +117,9 @@ export class PointLoop extends PointFlow {
 /**
  * It is a point that represents an item.
  */
-export abstract class PointItem<T> extends Point {
+export abstract class PointItem<T = unknown, U = unknown> extends Point<T> {
   constructor(
-    public value: T,
+    public value: U,
     positions: Position[],
     variables: Object<Value>
   ) {
@@ -130,7 +130,7 @@ export abstract class PointItem<T> extends Point {
 /**
  * It is a point that represents a form.
  */
-export class PointForm extends PointItem<ValueForm> {
+export class PointForm extends PointItem<PointForm, ValueForm> {
   static new(
     element: ElementForm,
     positions: Position[],
@@ -153,7 +153,7 @@ export class PointForm extends PointItem<ValueForm> {
 /**
  * It is a point that represents a return.
  */
-export class PointReturn extends PointItem<ValueReturn> {
+export class PointReturn extends PointItem<PointReturn, ValueReturn> {
   static new(
     element: ElementReturn,
     positions: Position[],
@@ -171,7 +171,7 @@ export class PointReturn extends PointItem<ValueReturn> {
 /**
  * It is a point that represents variables.
  */
-export class PointVariables extends PointItem<ValueVariables> {
+export class PointVariables extends PointItem<PointVariables, ValueVariables> {
   static new(
     element: ElementVariables,
     positions: Position[],
