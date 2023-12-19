@@ -36,23 +36,23 @@ export abstract class Point {
   }
 
   static create(
-    flow: ElementFlow,
+    elementFlow: ElementFlow,
     positions: Position[],
     variables: Obj<Value> = {}
   ): Point {
-    const item = flow.get(positions);
-    if (item instanceof ElementList)
-      return PointList.new(item, positions, variables);
-    if (item instanceof ElementCond)
-      return PointCond.new(item, positions, variables);
-    if (item instanceof ElementLoop)
-      return PointLoop.new(item, positions, variables);
-    if (item instanceof ElementForm)
-      return PointForm.new(item, positions, variables);
-    if (item instanceof ElementReturn)
-      return PointReturn.new(item, positions, variables);
-    if (item instanceof ElementVariables)
-      return PointVariables.new(item, positions, variables);
+    const element = elementFlow.get(positions);
+    if (element instanceof ElementList)
+      return PointList.create(element, positions, variables);
+    if (element instanceof ElementCond)
+      return PointCond.create(element, positions, variables);
+    if (element instanceof ElementLoop)
+      return PointLoop.create(element, positions, variables);
+    if (element instanceof ElementForm)
+      return PointForm.create(element, positions, variables);
+    if (element instanceof ElementReturn)
+      return PointReturn.new(element, positions, variables);
+    if (element instanceof ElementVariables)
+      return PointVariables.create(element, positions, variables);
     throw new Error('Invalid element');
   }
 
@@ -68,7 +68,7 @@ export abstract class PointFlow extends Point {}
  * It is a point that represents a list.
  */
 export class PointList extends PointFlow {
-  static new(
+  static create(
     _: ElementList,
     positions: Position[],
     variables: Obj<Value>
@@ -88,7 +88,7 @@ export class PointList extends PointFlow {
  * It is a point that represents a conditional.
  */
 export class PointCond extends PointFlow {
-  static new(
+  static create(
     _: ElementCond,
     positions: Position[],
     variables: Obj<Value>
@@ -108,7 +108,7 @@ export class PointCond extends PointFlow {
  * It is a point that represents a loop.
  */
 export class PointLoop extends PointFlow {
-  static new(
+  static create(
     _: ElementLoop,
     positions: Position[],
     variables: Obj<Value>
@@ -137,7 +137,7 @@ export abstract class PointItem<T> extends Point {
  * It is a point that represents a form.
  */
 export class PointForm extends PointItem<ValueForm> {
-  static new(
+  static create(
     element: ElementForm,
     positions: Position[],
     variables: Obj<Value>
@@ -190,7 +190,7 @@ export class PointReturn extends PointItem<ValueReturn> {
  * It is a point that represents variables.
  */
 export class PointVariables extends PointItem<ValueVariables> {
-  static new(
+  static create(
     element: ElementVariables,
     positions: Position[],
     variables: Obj<Value>
