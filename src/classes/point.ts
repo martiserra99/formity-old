@@ -63,11 +63,11 @@ export abstract class Point<T = unknown> {
     throw new Error('Invalid element');
   }
 
-  add(variables: Object<Value>): T {
-    return this.set({ ...this.variables, ...variables });
+  addVariables(variables: Object<Value>): T {
+    return this.setVariables({ ...this.variables, ...variables });
   }
 
-  protected abstract set(variables: Object<Value>): T;
+  protected abstract setVariables(variables: Object<Value>): T;
 }
 
 /**
@@ -83,7 +83,7 @@ export class PointList extends PointFlow<PointList> {
     return new PointList(positions, variables);
   }
 
-  protected set(variables: Object<Value>): PointList {
+  protected setVariables(variables: Object<Value>): PointList {
     return new PointList(this.positions, variables);
   }
 }
@@ -96,7 +96,7 @@ export class PointCond extends PointFlow<PointCond> {
     return new PointCond(positions, variables);
   }
 
-  protected set(variables: Object<Value>): PointCond {
+  protected setVariables(variables: Object<Value>): PointCond {
     return new PointCond(this.positions, variables);
   }
 }
@@ -109,7 +109,7 @@ export class PointLoop extends PointFlow<PointLoop> {
     return new PointLoop(positions, variables);
   }
 
-  protected set(variables: Object<Value>): PointLoop {
+  protected setVariables(variables: Object<Value>): PointLoop {
     return new PointLoop(this.positions, variables);
   }
 }
@@ -140,12 +140,12 @@ export class PointForm extends PointItem<PointForm, ValueForm> {
     return new PointForm(value, positions, variables);
   }
 
-  defaultValues(values: Object<Value>) {
+  setDefaultValues(values: Object<Value>) {
     const value = { ...this.value, defaultValues: values };
     return new PointForm(value, this.positions, this.variables);
   }
 
-  protected set(variables: Object<Value>): PointForm {
+  protected setVariables(variables: Object<Value>): PointForm {
     return new PointForm(this.value, this.positions, variables);
   }
 }
@@ -163,7 +163,7 @@ export class PointReturn extends PointItem<PointReturn, ValueReturn> {
     return new PointReturn(value, positions, variables);
   }
 
-  protected set(variables: Object<Value>): PointReturn {
+  protected setVariables(variables: Object<Value>): PointReturn {
     return new PointReturn(this.value, this.positions, variables);
   }
 }
@@ -181,7 +181,7 @@ export class PointVariables extends PointItem<PointVariables, ValueVariables> {
     return new PointVariables(value, positions, variables);
   }
 
-  protected set(variables: Object<Value>): PointVariables {
+  protected setVariables(variables: Object<Value>): PointVariables {
     return new PointVariables(this.value, this.positions, variables);
   }
 }

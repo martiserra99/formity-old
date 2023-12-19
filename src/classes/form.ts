@@ -37,8 +37,10 @@ class Form {
    * @returns The current and the next point.
    */
   next(point: PointForm, values: Object<Value>): [PointForm, PointStop] {
-    const currPoint = point.defaultValues(values);
-    const nextPoint = this._nextStop(this._nextStep(currPoint.add(values)));
+    const currPoint = point.setDefaultValues(values);
+    const nextPoint = this._nextStop(
+      this._nextStep(currPoint.addVariables(values))
+    );
     return [currPoint, nextPoint];
   }
 
@@ -77,7 +79,7 @@ class Form {
 
   _nextVariables(point: Point): Point {
     return point instanceof PointVariables
-      ? point.add(point.value as Object<Value>)
+      ? point.addVariables(point.value as Object<Value>)
       : point;
   }
 
