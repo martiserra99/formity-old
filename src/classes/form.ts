@@ -2,13 +2,15 @@ import { Object, Value } from 'mongu';
 
 import { JsonList } from '../types/json';
 import { Position } from '../types/position';
-import { PointForm, PointReturn } from './point';
+
+import { Point, PointForm, PointVariables, PointReturn } from './point';
 
 import { ElementList, ElementFlow, ElementItem } from './element';
-import { Point, PointVariables } from './point';
+
 import { Navigate } from './navigate';
 
-type PointStop = PointForm | PointReturn;
+type StepPoint = PointForm | PointReturn | PointVariables;
+type StopPoint = PointForm | PointReturn;
 
 /**
  * This class contains all the logic to get access to the initial and next points.
@@ -21,25 +23,27 @@ class Form {
   }
 
   /**
-   * It returns the initial point.
-   * @returns The initial point.
+   * It returns the initial form point.
+   *
+   * @returns The initial form point.
    */
   initial(): PointForm {
     const positions = this._initialPositions(this.element);
-    const point = Point.create(this.element, positions);
-    return this._nextStop(point) as PointForm;
+    const point = Point.create(this.element, positions) as StepPoint;
+    return this._nextStopPoint(point) as PointForm;
   }
 
   /**
-   * It returns the current and the next point.
-   * @param point The point.
+   * It returns the form point with the default values changed to the values and the next form point or return point.
+   *
+   * @param point The form point.
    * @param values The values.
-   * @returns The current and the next point.
+   * @returns The form point and the next form point or return point.
    */
-  next(point: PointForm, values: Object<Value>): [PointForm, PointStop] {
+  next(point: PointForm, values: Object<Value>): [PointForm, StopPoint] {
     const currPoint = point.setDefaultValues(values);
-    const nextPoint = this._nextStop(
-      this._nextStep(currPoint.addVariables(values))
+    const nextPoint = this._nextStopPoint(
+      this._nextStepPoint(currPoint.addVariables(values))
     );
     return [currPoint, nextPoint];
   }
@@ -65,31 +69,31 @@ class Form {
     return [];
   }
 
-  _nextStop(point: Point): PointStop {
+  _nextStopPoint(point: StepPoint): StopPoint {
     let nextPoint = point;
     while (nextPoint instanceof PointVariables) {
-      nextPoint = this._nextStep(nextPoint);
+      nextPoint = this._nextStepPoint(nextPoint);
     }
-    return nextPoint as PointStop;
+    return nextPoint as StopPoint;
   }
 
-  _nextStep(point: Point): Point {
-    return this._nextPoint(this._nextVariables(point));
+  _nextStepPoint(point: StepPoint): StepPoint {
+    return this._nextPoint(this._nextPointVariables(point));
   }
 
-  _nextVariables(point: Point): Point {
+  _nextPointVariables(point: StepPoint): StepPoint {
     return point instanceof PointVariables
       ? point.addVariables(point.value as Object<Value>)
       : point;
   }
 
-  _nextPoint(point: Point): Point {
+  _nextPoint(point: Point): StepPoint {
     const nextPoint = this._nextPointLevel(point);
     if (nextPoint) return nextPoint;
     return this._nextPoint(this._upPoint(point));
   }
 
-  _nextPointLevel(point: Point): Point | null {
+  _nextPointLevel(point: Point): StepPoint | null {
     const next = this._nextPointLevelNext(point);
     if (next) {
       const down = this._nextPointLevelDown(next);
@@ -100,20 +104,19 @@ class Form {
   }
 
   _nextPointLevelNext(point: Point): Point | null {
-    const flow = this.element.get(point.previousPositions) as ElementFlow;
-    const position = Navigate.next(
-      flow,
-      point.currentPosition,
-      point.variables
-    );
+    const previousPositions = point.previousPositions;
+    const elementFlow = this.element.get(previousPositions) as ElementFlow;
+    const currentPosition = point.currentPosition;
+    const variables = point.variables;
+    const position = Navigate.next(elementFlow, currentPosition, variables);
     if (position !== null) {
-      const positions = [...point.previousPositions, position];
-      return Point.create(this.element, positions, point.variables);
+      const positions = [...previousPositions, position];
+      return Point.create(this.element, positions, variables);
     }
     return null;
   }
 
-  _nextPointLevelDown(point: Point): Point | null {
+  _nextPointLevelDown(point: Point): StepPoint | null {
     const element = this.element.get(point.positions);
     if (element instanceof ElementFlow) {
       const position = Navigate.down(element, point.variables);
@@ -126,7 +129,7 @@ class Form {
       }
       return null;
     }
-    return point;
+    return point as StepPoint;
   }
 
   _upPoint(point: Point): Point {

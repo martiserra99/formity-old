@@ -59,7 +59,8 @@ export abstract class ElementFlow<
    */
   get(positions: Position[]): Element {
     return positions.reduce((element: Element, position: Position) => {
-      return (element as ElementFlow).getChild(position);
+      const elementFlow = element as ElementFlow;
+      return elementFlow.getChild(position);
     }, this);
   }
 

@@ -6,19 +6,12 @@ import { Position } from '../types/position';
 import { ElementFlow } from './element';
 import { ValueForm, ValueReturn, ValueVariables } from '../types/value';
 
-import {
-  ElementList,
-  ElementCond,
-  ElementLoop,
-  ElementForm,
-  ElementReturn,
-  ElementVariables,
-} from './element';
+import { ElementForm, ElementReturn, ElementVariables } from './element';
 
 /**
  * This class represents a point in the execution.
  */
-export abstract class Point<T = unknown> {
+export class Point {
   public positions: Position[];
   public variables: Object<Value>;
 
@@ -42,15 +35,6 @@ export abstract class Point<T = unknown> {
   ): Point {
     const element = elementFlow.get(positions);
 
-    if (element instanceof ElementList)
-      return PointList.new(positions, variables);
-
-    if (element instanceof ElementCond)
-      return PointCond.new(positions, variables);
-
-    if (element instanceof ElementLoop)
-      return PointLoop.new(positions, variables);
-
     if (element instanceof ElementForm)
       return PointForm.new(element, positions, variables);
 
@@ -60,77 +44,27 @@ export abstract class Point<T = unknown> {
     if (element instanceof ElementVariables)
       return PointVariables.new(element, positions, variables);
 
-    throw new Error('Invalid element');
+    return new Point(positions, variables);
   }
 
-  addVariables(variables: Object<Value>): T {
-    return this.setVariables({ ...this.variables, ...variables });
-  }
-
-  protected abstract setVariables(variables: Object<Value>): T;
-}
-
-/**
- * It is a point that represents a flow.
- */
-export abstract class PointFlow<T = unknown> extends Point<T> {}
-
-/**
- * It is a point that represents a list.
- */
-export class PointList extends PointFlow<PointList> {
-  static new(positions: Position[], variables: Object<Value>): PointList {
-    return new PointList(positions, variables);
-  }
-
-  protected setVariables(variables: Object<Value>): PointList {
-    return new PointList(this.positions, variables);
-  }
-}
-
-/**
- * It is a point that represents a conditional.
- */
-export class PointCond extends PointFlow<PointCond> {
-  static new(positions: Position[], variables: Object<Value>): PointCond {
-    return new PointCond(positions, variables);
-  }
-
-  protected setVariables(variables: Object<Value>): PointCond {
-    return new PointCond(this.positions, variables);
-  }
-}
-
-/**
- * It is a point that represents a loop.
- */
-export class PointLoop extends PointFlow<PointLoop> {
-  static new(positions: Position[], variables: Object<Value>): PointLoop {
-    return new PointLoop(positions, variables);
-  }
-
-  protected setVariables(variables: Object<Value>): PointLoop {
-    return new PointLoop(this.positions, variables);
-  }
-}
-
-/**
- * It is a point that represents an item.
- */
-export abstract class PointItem<T = unknown, U = unknown> extends Point<T> {
-  constructor(
-    public value: U,
-    positions: Position[],
-    variables: Object<Value>
-  ) {
-    super(positions, variables);
+  addVariables(variables: Object<Value>): Point {
+    const vars = { ...this.variables, ...variables };
+    return new Point(this.positions, vars);
   }
 }
 
 /**
  * It is a point that represents a form.
  */
-export class PointForm extends PointItem<PointForm, ValueForm> {
+export class PointForm extends Point {
+  constructor(
+    public value: ValueForm,
+    positions: Position[],
+    variables: Object<Value>
+  ) {
+    super(positions, variables);
+  }
+
   static new(
     element: ElementForm,
     positions: Position[],
@@ -145,15 +79,24 @@ export class PointForm extends PointItem<PointForm, ValueForm> {
     return new PointForm(value, this.positions, this.variables);
   }
 
-  protected setVariables(variables: Object<Value>): PointForm {
-    return new PointForm(this.value, this.positions, variables);
+  addVariables(variables: Object<Value>): PointForm {
+    const vars = { ...this.variables, ...variables };
+    return new PointForm(this.value, this.positions, vars);
   }
 }
 
 /**
  * It is a point that represents a return.
  */
-export class PointReturn extends PointItem<PointReturn, ValueReturn> {
+export class PointReturn extends Point {
+  constructor(
+    public value: ValueReturn,
+    positions: Position[],
+    variables: Object<Value>
+  ) {
+    super(positions, variables);
+  }
+
   static new(
     element: ElementReturn,
     positions: Position[],
@@ -163,15 +106,24 @@ export class PointReturn extends PointItem<PointReturn, ValueReturn> {
     return new PointReturn(value, positions, variables);
   }
 
-  protected setVariables(variables: Object<Value>): PointReturn {
-    return new PointReturn(this.value, this.positions, variables);
+  addVariables(variables: Object<Value>): PointReturn {
+    const vars = { ...this.variables, ...variables };
+    return new PointReturn(this.value, this.positions, vars);
   }
 }
 
 /**
  * It is a point that represents variables.
  */
-export class PointVariables extends PointItem<PointVariables, ValueVariables> {
+export class PointVariables extends Point {
+  constructor(
+    public value: ValueVariables,
+    positions: Position[],
+    variables: Object<Value>
+  ) {
+    super(positions, variables);
+  }
+
   static new(
     element: ElementVariables,
     positions: Position[],
@@ -181,7 +133,8 @@ export class PointVariables extends PointItem<PointVariables, ValueVariables> {
     return new PointVariables(value, positions, variables);
   }
 
-  protected setVariables(variables: Object<Value>): PointVariables {
-    return new PointVariables(this.value, this.positions, variables);
+  addVariables(variables: Object<Value>): PointVariables {
+    const vars = { ...this.variables, ...variables };
+    return new PointVariables(this.value, this.positions, vars);
   }
 }
