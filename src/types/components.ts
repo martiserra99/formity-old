@@ -16,7 +16,7 @@ export type Json = JsonList;
 export type Result = Value;
 
 export interface FormityProps {
-  json: Json;
+  form: Json;
   onSubmit: (result: Result) => void;
   className?: string;
 }

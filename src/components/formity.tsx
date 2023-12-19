@@ -12,7 +12,7 @@ import useRender from '../hooks/formity/use-render';
 
 import FormityForm from './formity-form';
 
-function Formity({ json, onSubmit, className }: FormityProps) {
+function Formity({ form: json, onSubmit, className }: FormityProps) {
   const form = useMemo(() => new Form(json), [json]);
 
   const [points, setPoints] = useState(() => [form.initial()]);
