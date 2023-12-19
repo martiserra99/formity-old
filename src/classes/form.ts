@@ -98,10 +98,14 @@ class Form {
   }
 
   _nextPointLevelNext(point: Point): Point | null {
-    const flow = this.element.get(point.prevPositions) as ElementFlow;
-    const position = Navigate.next(flow, point.currPosition, point.variables);
+    const flow = this.element.get(point.previousPositions) as ElementFlow;
+    const position = Navigate.next(
+      flow,
+      point.currentPosition,
+      point.variables
+    );
     if (position !== null) {
-      const positions = [...point.prevPositions, position];
+      const positions = [...point.previousPositions, position];
       return Point.create(this.element, positions, point.variables);
     }
     return null;
@@ -124,7 +128,7 @@ class Form {
   }
 
   _upPoint(point: Point): Point {
-    return Point.create(this.element, point.prevPositions, point.variables);
+    return Point.create(this.element, point.previousPositions, point.variables);
   }
 }
 

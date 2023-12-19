@@ -27,12 +27,12 @@ export abstract class Point {
     this.variables = variables;
   }
 
-  get prevPositions(): Position[] {
-    return this.positions.slice(0, this.positions.length - 1);
+  get currentPosition(): Position {
+    return this.positions[this.positions.length - 1];
   }
 
-  get currPosition(): Position {
-    return this.positions[this.positions.length - 1];
+  get previousPositions(): Position[] {
+    return this.positions.slice(0, this.positions.length - 1);
   }
 
   static create(
