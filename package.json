@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -34,7 +34,7 @@
     "trailingComma": "es5"
   },
   "name": "formity",
-  "description": "Create dynamic React forms with just a JSON",
+  "description": "Build dynamic React forms, without the hassle.",
   "author": "Marti Serra",
   "module": "dist/formity.esm.js",
   "size-limit": [
