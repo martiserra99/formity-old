@@ -1,6 +1,6 @@
 # formity
 
-Build dynamic React forms, without the hassle.
+Build dynamic React forms, easily with JSON syntax.
 
 ## Overview
 
