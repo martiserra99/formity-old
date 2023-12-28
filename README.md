@@ -22,7 +22,7 @@ npm install formity
 
 ## Documentation
 
-Check out the documentation [here](https://formity-docs.vercel.app).
+Check out the documentation [here](https://www.martiserra.me/formity).
 
 ## License
 
