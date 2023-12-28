@@ -59,7 +59,7 @@
     "type": "git",
     "url": "https://github.com/martiserra99/formity"
   },
-  "homepage": "https://www.martiserra.me/formity",
+  "homepage": "https://martiserra.me/formity",
   "devDependencies": {
     "@size-limit/preset-small-lib": "^11.0.0",
     "@types/react": "^18.2.39",
