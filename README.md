@@ -10,7 +10,7 @@ This is where Formity comes in, a solution designed to simplify the process. Wit
 
 ## Dependencies
 
-Formity depends on two packages, [Mongu](https://mongu-docs.vercel.app) and [React Hook Form](https://www.react-hook-form.com). We suggest you to be at least a little familiar with these packages before using Formity.
+Formity depends on two packages, [Mongu](https://www.martiserra.me/mongu) and [React Hook Form](https://www.react-hook-form.com). We suggest you to be at least a little familiar with these packages before using Formity.
 
 ## Installation
 
