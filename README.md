@@ -4,7 +4,7 @@ Build dynamic React forms, easily with JSON syntax.
 
 ## Overview
 
-Creating a multi-step form like [this](https://formity-example.vercel.app) in which there are questions dependent on previous answers can be a tedious and cumbersome task. Additionally, the challenges intensify when considering the need to store, share, or save such forms in a file or a database.
+Creating a multi-step form like [this](https://martiserra99.github.io/formity-example) in which there are questions dependent on previous answers can be a tedious and cumbersome task. Additionally, the challenges intensify when considering the need to store, share, or save such forms in a file or a database.
 
 This is where Formity comes in, a solution designed to simplify the process. With Formity, building advanced multi-step forms is as straightforward as using a JSON. Say goodbye to complexities and experience form development like never before.
 
