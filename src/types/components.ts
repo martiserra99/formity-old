@@ -18,7 +18,7 @@ export type Result = Value;
 export interface FormityProps {
   form: Json;
   onSubmit: (result: Result) => void;
-  className?: string;
+  [key: string]: unknown;
 }
 
 export interface FormityFormProps {
