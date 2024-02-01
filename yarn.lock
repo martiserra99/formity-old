@@ -4893,10 +4893,10 @@ mkdirp@^0.5.1, mkdirp@0.x:
   dependencies:
     minimist "^1.2.6"
 
-mongu@^2.3.3:
-  version "2.3.3"
-  resolved "https://registry.npmjs.org/mongu/-/mongu-2.3.3.tgz"
-  integrity sha512-zhaPz5eo0AV2qZXWnQbEUZVB5cRPjIX3rp6uwUBJQh4IvqRKUno+vlTBpMoGjR4PDNsFggBDHjOobjcinoNIEQ==
+mongu@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.npmjs.org/mongu/-/mongu-2.5.0.tgz"
+  integrity sha512-UJ8xEHQ1QNj21k7F0xXaiBvdk3Zi3YX+GZnz9gR9I84ZV+Iy43rKXcGDJe6NN+PPXB3XNqc0Zd2V2grAuZDuAQ==
 
 mri@^1.1.0:
   version "1.2.0"
