@@ -1,12 +1,12 @@
-import { Object, Value } from 'mongu';
+import { Value } from 'mongu';
 
 import { mongu } from 'mongu';
 
 import { ValueForm } from '../../types/value';
 
 function useResolver(form: ValueForm) {
-  return (values: Object<Value>) => {
-    const errors: Object<{ type: string; message: string }> = {};
+  return (values: { [key: string]: Value }) => {
+    const errors: { [key: string]: { type: string; message: string } } = {};
     for (const [key, validations] of Object.entries(form.resolver)) {
       const result = validations.find(
         ([validation]) => mongu(validation, values) === false

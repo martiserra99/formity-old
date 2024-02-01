@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 
-import { Object, Value } from 'mongu';
+import { Value } from 'mongu';
 
 import { FormityProps } from '../types/components';
 
@@ -24,7 +24,7 @@ function Formity({ form: json, onSubmit, className }: FormityProps) {
   const resolver = useResolver(value);
   const render = useRender(value);
 
-  function handleSubmit(values: Object<Value>) {
+  function handleSubmit(values: { [key: string]: Value }) {
     const [currPoint, nextPoint] = form.next(point, values);
     if (nextPoint instanceof PointForm) {
       setPoints([...points.slice(0, -1), currPoint, nextPoint]);
