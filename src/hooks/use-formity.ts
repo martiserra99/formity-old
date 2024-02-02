@@ -1,8 +1,7 @@
 import { useContext } from 'react';
 
-import FormityContext, {
-  FormityContextValue,
-} from '../context/formity-context';
+import FormityContext from '../context/formity-context';
+import { FormityContextValue } from '../context/formity-context';
 
 /**
  * It is the hook to get the context.

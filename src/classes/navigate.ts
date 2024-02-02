@@ -1,8 +1,6 @@
-import { Value } from 'mongu';
+import { mongu, Value } from 'mongu';
 
-import { mongu } from 'mongu';
-
-import { ElementFlow } from './element';
+import { ElementFlow, ElementList, ElementCond, ElementLoop } from './element';
 import {
   Position,
   PositionList,
@@ -10,12 +8,10 @@ import {
   PositionLoop,
 } from '../types/position';
 
-import { ElementList, ElementCond, ElementLoop } from './element';
-
 /**
  * This class contains methods to navigate through the elements.
  */
-export abstract class Navigate<
+abstract class Navigate<
   T extends ElementFlow = ElementFlow,
   U extends Position = Position
 > {
@@ -71,7 +67,7 @@ export abstract class Navigate<
 /**
  * It defines logic to navigate through a list.
  */
-export class NavigateList extends Navigate<ElementList, PositionList> {
+class NavigateList extends Navigate<ElementList, PositionList> {
   protected down(): PositionList | null {
     if (this.element.length > 0) return 0;
     return null;
@@ -86,7 +82,7 @@ export class NavigateList extends Navigate<ElementList, PositionList> {
 /**
  * It defines logic to navigate through a conditional.
  */
-export class NavigateCond extends Navigate<ElementCond, PositionCond> {
+class NavigateCond extends Navigate<ElementCond, PositionCond> {
   protected down(variables: { [key: string]: Value }): PositionCond | null {
     if (mongu(this.element.cond, variables)) {
       if (this.element.thenLength > 0) return ['then', 0];
@@ -111,7 +107,7 @@ export class NavigateCond extends Navigate<ElementCond, PositionCond> {
 /**
  * It defines logic to navigate through a loop.
  */
-export class NavigateLoop extends Navigate<ElementLoop, PositionLoop> {
+class NavigateLoop extends Navigate<ElementLoop, PositionLoop> {
   protected down(variables: { [key: string]: Value }): PositionLoop | null {
     if (mongu(this.element.cond, variables)) {
       if (this.element.length > 0) return 0;
@@ -128,3 +124,5 @@ export class NavigateLoop extends Navigate<ElementLoop, PositionLoop> {
     return null;
   }
 }
+
+export { Navigate, NavigateList, NavigateCond, NavigateLoop };

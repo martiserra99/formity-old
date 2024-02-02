@@ -11,7 +11,7 @@ import useRender from '../hooks/formity/use-render';
 import FormityForm from './formity-form';
 import { JsonList } from '../types/json';
 
-export interface FormityProps
+interface FormityProps
   extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   form: JsonList;
   onSubmit: (data: Value) => void;
@@ -60,3 +60,5 @@ function Formity({ form: json, onSubmit, className }: FormityProps) {
 }
 
 export default Formity;
+
+export { FormityProps };

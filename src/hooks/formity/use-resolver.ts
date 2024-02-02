@@ -1,6 +1,4 @@
-import { Value } from 'mongu';
-
-import { mongu } from 'mongu';
+import { mongu, Value } from 'mongu';
 
 import { ValueForm } from '../../types/value';
 

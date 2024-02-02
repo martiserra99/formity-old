@@ -1,4 +1,6 @@
-export type Position = PositionList | PositionCond | PositionLoop;
-export type PositionList = number;
-export type PositionCond = ["then" | "else", number];
-export type PositionLoop = number;
+type Position = PositionList | PositionCond | PositionLoop;
+type PositionList = number;
+type PositionCond = ['then' | 'else', number];
+type PositionLoop = number;
+
+export { Position, PositionList, PositionCond, PositionLoop };

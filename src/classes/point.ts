@@ -11,7 +11,7 @@ import { ElementForm, ElementReturn, ElementVariables } from './element';
 /**
  * This class represents a point in the execution.
  */
-export class Point {
+class Point {
   public positions: Position[];
   public variables: { [key: string]: Value };
 
@@ -56,7 +56,7 @@ export class Point {
 /**
  * It is a point that represents a form.
  */
-export class PointForm extends Point {
+class PointForm extends Point {
   constructor(
     public value: ValueForm,
     positions: Position[],
@@ -88,7 +88,7 @@ export class PointForm extends Point {
 /**
  * It is a point that represents a return.
  */
-export class PointReturn extends Point {
+class PointReturn extends Point {
   constructor(
     public value: ValueReturn,
     positions: Position[],
@@ -115,7 +115,7 @@ export class PointReturn extends Point {
 /**
  * It is a point that represents variables.
  */
-export class PointVariables extends Point {
+class PointVariables extends Point {
   constructor(
     public value: ValueVariables,
     positions: Position[],
@@ -138,3 +138,13 @@ export class PointVariables extends Point {
     return new PointVariables(this.value, this.positions, vars);
   }
 }
+
+export {
+  Point,
+  PointForm,
+  PointReturn,
+  PointVariables,
+  ValueForm,
+  ValueReturn,
+  ValueVariables,
+};

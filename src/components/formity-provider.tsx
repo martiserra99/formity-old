@@ -4,7 +4,7 @@ import FormityContext, {
   FormityContextValue,
 } from '../context/formity-context';
 
-export interface FormityProviderProps {
+interface FormityProviderProps {
   components: FormityContextValue['components'];
   children: ReactNode;
 }
@@ -21,3 +21,5 @@ function FormityProvider({ components, children }: FormityProviderProps) {
 }
 
 export default FormityProvider;
+
+export { FormityProviderProps };
