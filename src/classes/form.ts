@@ -9,8 +9,8 @@ import { ElementList, ElementFlow, ElementItem } from './element';
 
 import { Navigate } from './navigate';
 
-type StepPoint = PointForm | PointReturn | PointVariables;
-type StopPoint = PointForm | PointReturn;
+type PointStep = PointForm | PointReturn | PointVariables;
+type PointStop = PointForm | PointReturn;
 
 /**
  * This class contains all the logic to get access to the initial and next points.
@@ -24,18 +24,16 @@ class Form {
 
   /**
    * It returns the initial form point.
-   *
    * @returns The initial form point.
    */
   initial(): PointForm {
-    const positions = this._initialPositions(this.element);
-    const point = Point.create(this.element, positions) as StepPoint;
-    return this._nextStopPoint(point) as PointForm;
+    const positions = this.initialPositionsOrThrow(this.element);
+    const point = Point.create(this.element, positions) as PointStep;
+    return this.toPointForm(point);
   }
 
   /**
-   * It returns the form point with the default values changed to the values and the next form point or return point.
-   *
+   * It returns the form point with the default values changed and the next form point or return point.
    * @param point The form point.
    * @param values The values.
    * @returns The form point and the next form point or return point.
@@ -43,100 +41,174 @@ class Form {
   next(
     point: PointForm,
     values: { [key: string]: Value }
-  ): [PointForm, StopPoint] {
-    const currPoint = point.setDefaultValues(values);
-    const nextPoint = this._nextStopPoint(
-      this._nextStepPoint(currPoint.add(values))
+  ): [PointForm, PointStop] {
+    const currentPoint = point.setDefaultValues(values);
+    const nextPoint = this.toPointStop(
+      this.nextPointStep(currentPoint.withVariables(values))
     );
-    return [currPoint, nextPoint];
+    return [currentPoint, nextPoint];
   }
 
-  _initialPositions(element: ElementFlow): Position[] {
+  /**
+   * It returns the initial positions or throws an error if there are no initial positions.
+   * @param element The element flow.
+   * @returns The initial positions.
+   */
+  private initialPositionsOrThrow(element: ElementFlow): Position[] {
+    const positions = this.initialPositions(element);
+    if (positions.length === 0) throw new Error('The form is not valid');
+    return positions;
+  }
+
+  /**
+   * It returns the initial positions or an empty list if there are no initial positions.
+   * @param element The element flow.
+   * @returns The initial positions or an empty list if there are no initial positions.
+   */
+  private initialPositions(element: ElementFlow): Position[] {
     let position = Navigate.down(element);
     while (position !== null) {
-      const positions = this._initialPositionsFromPosition(element, position);
+      const positions = this.initialPositionsFromPosition(element, position);
       if (positions.length > 0) return positions;
       position = Navigate.next(element, position);
     }
     return [];
   }
 
-  _initialPositionsFromPosition(
+  /**
+   * It returns the initial positions from the given position or an empty list if there are no initial positions.
+   * @param element The element flow.
+   * @param position The position.
+   * @returns The initial positions from the given position or an empty list if there are no initial positions.
+   */
+  private initialPositionsFromPosition(
     element: ElementFlow,
     position: Position
   ): Position[] {
     const child = element.get([position]);
     if (child instanceof ElementItem) return [position];
-    const positions = this._initialPositions(child as ElementFlow);
+    const positions = this.initialPositions(child as ElementFlow);
     if (positions.length > 0) return [position, ...positions];
     return [];
   }
 
-  _nextStopPoint(point: StepPoint): StopPoint {
+  /**
+   * It returns the current or next form point or throws an error if there is no form point.
+   * @param point The step point.
+   * @returns The current or next form point.
+   */
+  private toPointForm(point: PointStep): PointForm {
+    const nextPoint = this.toPointStop(point);
+    if (nextPoint instanceof PointForm) return nextPoint;
+    throw new Error('The form is not valid');
+  }
+
+  /**
+   * It returns the current or next stop point from the given step point.
+   * @param point The step point.
+   * @returns The stop point.
+   */
+  private toPointStop(point: PointStep): PointStop {
     let nextPoint = point;
     while (nextPoint instanceof PointVariables) {
-      nextPoint = this._nextStepPoint(nextPoint);
+      nextPoint = this.nextPointStep(nextPoint);
     }
-    return nextPoint as StopPoint;
+    return nextPoint as PointStop;
   }
 
-  _nextStepPoint(point: StepPoint): StepPoint {
-    return this._nextPoint(this._nextPointVariables(point));
+  /**
+   * It returns the next step point from the given step point.
+   * @param point The step point.
+   * @returns The next step point.
+   */
+  private nextPointStep(point: PointStep): PointStep {
+    return this.nextPoint(this.nextPointVariables(point));
   }
 
-  _nextPointVariables(point: StepPoint): StepPoint {
+  /**
+   * It returns the step point with the new variables if the given point is a variables point. Otherwise, it returns the given point.
+   * @param point The step point.
+   * @returns The step point with the new variables or the given point.
+   */
+  private nextPointVariables(point: PointStep): PointStep {
     return point instanceof PointVariables
-      ? point.add(point.value as { [key: string]: Value })
+      ? point.withVariables(point.value)
       : point;
   }
 
-  _nextPoint(point: Point): StepPoint {
-    const nextPoint = this._nextPointLevel(point);
+  /**
+   * It returns the next step point.
+   * @param point The point.
+   * @returns The next step point.
+   */
+  private nextPoint(point: Point): PointStep {
+    const nextPoint = this.nextPointFlow(point);
     if (nextPoint) return nextPoint;
-    return this._nextPoint(this._upPoint(point));
+    return this.nextPoint(this.parentPoint(point));
   }
 
-  _nextPointLevel(point: Point): StepPoint | null {
-    const next = this._nextPointLevelNext(point);
+  /**
+   * It returns the next step point inside the current flow or null if there is no next step point.
+   * @param point The point.
+   * @returns The next step point inside the current flow or null if there is no next step point.
+   */
+  private nextPointFlow(point: Point): PointStep | null {
+    const next = this.nextPointFlowNext(point);
     if (next) {
-      const down = this._nextPointLevelDown(next);
+      const down = this.nextPointFlowDown(next);
       if (down) return down;
-      return this._nextPointLevel(next);
+      return this.nextPointFlow(next);
     }
     return null;
   }
 
-  _nextPointLevelNext(point: Point): Point | null {
-    const previousPositions = point.flowPosition;
-    const elementFlow = this.element.get(previousPositions) as ElementFlow;
-    const currentPosition = point.itemPosition;
-    const variables = point.variables;
-    const position = Navigate.next(elementFlow, currentPosition, variables);
+  /**
+   * It returns the next point inside the current flow (without going down) or null if there is no next point.
+   * @param point The point.
+   * @returns The next point inside the current flow (without going down) or null if there is no next point.
+   */
+  private nextPointFlowNext(point: Point): Point | null {
+    const flow = this.element.get(point.parentPositions) as ElementFlow;
+    const position = Navigate.next(flow, point.position, point.variables);
     if (position !== null) {
-      const positions = [...previousPositions, position];
-      return Point.create(this.element, positions, variables);
+      const positions = [...point.parentPositions, position];
+      return Point.create(this.element, positions, point.variables);
     }
     return null;
   }
 
-  _nextPointLevelDown(point: Point): StepPoint | null {
+  /**
+   * It returns the next point inside the current flow (going down) or null if there is no next point.
+   * @param point The point.
+   * @returns The next point inside the current flow (going down) or null if there is no next point.
+   */
+  private nextPointFlowDown(point: Point): PointStep | null {
     const element = this.element.get(point.positions);
     if (element instanceof ElementFlow) {
       const position = Navigate.down(element, point.variables);
       if (position !== null) {
         const positions = [...point.positions, position];
         const next = Point.create(this.element, positions, point.variables);
-        const nextDown = this._nextPointLevelDown(next);
+        const nextDown = this.nextPointFlowDown(next);
         if (nextDown) return nextDown;
-        return this._nextPointLevel(next);
+        return this.nextPointFlow(next);
       }
       return null;
     }
-    return point as StepPoint;
+    return point as PointStep;
   }
 
-  _upPoint(point: Point): Point {
-    return Point.create(this.element, point.flowPosition, point.variables);
+  /**
+   * It returns the parent point.
+   * @param point The point.
+   * @returns The parent point.
+   */
+  private parentPoint(point: Point): Point {
+    try {
+      return Point.create(this.element, point.parentPositions, point.variables);
+    } catch {
+      throw new Error('The form is not valid');
+    }
   }
 }
 

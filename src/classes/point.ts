@@ -1,6 +1,4 @@
-import { Value } from 'mongu';
-
-import { mongu } from 'mongu';
+import { mongu, Value } from 'mongu';
 
 import { Position } from '../types/position';
 import { ValueForm, ValueReturn, ValueVariables } from '../types/value';
@@ -24,16 +22,18 @@ class Point {
   }
 
   /**
-   * It returns the position of the item.
+   * It returns the current position.
    */
-  get itemPosition(): Position {
+  get position(): Position {
+    if (this.positions.length === 0) throw new Error("Can't get position");
     return this.positions[this.positions.length - 1];
   }
 
   /**
-   * It returns the position of the flow.
+   * It returns the positions of the parent point.
    */
-  get flowPosition(): Position[] {
+  get parentPositions(): Position[] {
+    if (this.positions.length === 0) throw new Error("Can't get positions");
     return this.positions.slice(0, this.positions.length - 1);
   }
 
@@ -67,7 +67,7 @@ class Point {
    * @param variables The variables.
    * @returns The point with the new variables added.
    */
-  add(variables: { [key: string]: Value }): Point {
+  withVariables(variables: { [key: string]: Value }): Point {
     return new Point(this.positions, { ...this.variables, ...variables });
   }
 }
@@ -104,7 +104,7 @@ class PointForm extends Point {
     );
   }
 
-  add(variables: { [key: string]: Value }) {
+  withVariables(variables: { [key: string]: Value }) {
     return new PointForm(this.value, this.positions, {
       ...this.variables,
       ...variables,
@@ -136,7 +136,7 @@ class PointReturn extends Point {
     );
   }
 
-  add(variables: { [key: string]: Value }) {
+  withVariables(variables: { [key: string]: Value }) {
     return new PointReturn(this.value, this.positions, {
       ...this.variables,
       ...variables,
@@ -168,7 +168,7 @@ class PointVariables extends Point {
     );
   }
 
-  add(variables: { [key: string]: Value }) {
+  withVariables(variables: { [key: string]: Value }) {
     return new PointVariables(this.value, this.positions, {
       ...this.variables,
       ...variables,
