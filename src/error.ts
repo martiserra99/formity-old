@@ -4,7 +4,7 @@
 class NotValidFormError extends Error {
   constructor(message: string = 'The form is not valid') {
     super(message);
-    this.name = 'FormError';
+    this.name = 'NotValidFormError';
   }
 }
 
