@@ -9,7 +9,7 @@ import { FormityContextValue } from '../context/formity-context';
 function useFormity(): FormityContextValue {
   const value = useContext(FormityContext);
   if (value === null) {
-    throw new Error('useFormityContext must be used within a FormityProvider');
+    throw new Error('useFormity must be used within a FormityProvider');
   }
   return value;
 }
