@@ -3,6 +3,7 @@ import React, { ReactElement, isValidElement } from 'react';
 import { Value } from 'mongu';
 
 import { isArray, isObject } from '../../utils';
+import { NotValidFormError } from '../../error';
 
 import { Components } from '../../types';
 
@@ -31,7 +32,7 @@ function useRender(form: ValueForm): ReactElement {
 function toElement(value: Value, components: Components): ReactElement {
   const jsx = toJSX(value, components);
   if (React.isValidElement(jsx)) return jsx;
-  throw new Error('The value is not a valid element');
+  throw new NotValidFormError();
 }
 
 /**

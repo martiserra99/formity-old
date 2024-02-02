@@ -1,6 +1,7 @@
 import { mongu, Value } from 'mongu';
 
-import { isObject } from '../utils';
+import { isArray, isObject } from '../utils';
+import { NotValidFormError } from '../error';
 
 import { Position } from '../types/position';
 import { ValueForm, ValueReturn, ValueVariables } from '../types/value';
@@ -93,8 +94,38 @@ class PointForm extends Point {
     variables: { [key: string]: Value }
   ): PointForm {
     const value = mongu(element.value, variables);
-    assertValueForm(value);
+    this.assertValueForm(value);
     return new PointForm(value, positions, variables);
+  }
+
+  private static assertValueForm(value: Value): asserts value is ValueForm {
+    if (!isObject(value)) throw new NotValidFormError();
+    this.assertValueFormDefaultValues(value);
+    this.assertValueFormResolver(value);
+    this.assertValueFormRender(value);
+  }
+
+  private static assertValueFormDefaultValues(value: { [key: string]: Value }) {
+    if (!('defaultValues' in value)) throw new NotValidFormError();
+    if (!isObject(value.defaultValues)) throw new NotValidFormError();
+  }
+
+  private static assertValueFormResolver(value: { [key: string]: Value }) {
+    if (!('resolver' in value)) throw new NotValidFormError();
+    if (!isObject(value.resolver)) throw new NotValidFormError();
+    for (const validations of Object.values(value.resolver)) {
+      if (!isArray(validations)) throw new NotValidFormError();
+      for (const validation of validations) {
+        if (!isArray(validation)) throw new NotValidFormError();
+        if (value.length !== 2) throw new NotValidFormError();
+        if (typeof value[1] !== 'string') throw new NotValidFormError();
+      }
+    }
+  }
+
+  private static assertValueFormRender(value: { [key: string]: Value }) {
+    if (!('render' in value)) throw new NotValidFormError();
+    if (!isObject(value.render)) throw new NotValidFormError();
   }
 
   setDefaultValues(values: { [key: string]: Value }) {
@@ -111,11 +142,6 @@ class PointForm extends Point {
       ...variables,
     });
   }
-}
-
-function assertValueForm(value: Value): asserts value is ValueForm {
-  if (isObject(value)) return;
-  throw new Error('The form is not valid');
 }
 
 /**
@@ -175,8 +201,7 @@ class PointVariables extends Point {
   private static assertValueVariables(
     value: Value
   ): asserts value is ValueVariables {
-    if (isObject(value)) return;
-    throw new Error('The form is not valid');
+    if (!isObject(value)) throw new NotValidFormError();
   }
 
   withVariables(variables: { [key: string]: Value }) {

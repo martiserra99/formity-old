@@ -3,6 +3,8 @@ import { Value } from 'mongu';
 import { JsonList } from '../types/json';
 import { Position } from '../types/position';
 
+import { NotValidFormError } from '../error';
+
 import { Point, PointForm, PointVariables, PointReturn } from './point';
 
 import { ElementList, ElementFlow, ElementItem } from './element';
@@ -56,7 +58,7 @@ class Form {
    */
   private initialPositionsOrThrow(element: ElementFlow): Position[] {
     const positions = this.initialPositions(element);
-    if (positions.length === 0) throw new Error('The form is not valid');
+    if (positions.length === 0) throw new NotValidFormError();
     return positions;
   }
 
@@ -100,7 +102,7 @@ class Form {
   private toPointForm(point: PointStep): PointForm {
     const nextPoint = this.toPointStop(point);
     if (nextPoint instanceof PointForm) return nextPoint;
-    throw new Error('The form is not valid');
+    throw new NotValidFormError();
   }
 
   /**
@@ -207,7 +209,7 @@ class Form {
     try {
       return Point.create(this.element, point.parentPositions, point.variables);
     } catch {
-      throw new Error('The form is not valid');
+      throw new NotValidFormError();
     }
   }
 }
