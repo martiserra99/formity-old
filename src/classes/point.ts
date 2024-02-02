@@ -117,8 +117,8 @@ class PointForm extends Point {
       if (!isArray(validations)) throw new NotValidFormError();
       for (const validation of validations) {
         if (!isArray(validation)) throw new NotValidFormError();
-        if (value.length !== 2) throw new NotValidFormError();
-        if (typeof value[1] !== 'string') throw new NotValidFormError();
+        if (validation.length !== 2) throw new NotValidFormError();
+        if (typeof validation[1] !== 'string') throw new NotValidFormError();
       }
     }
   }
