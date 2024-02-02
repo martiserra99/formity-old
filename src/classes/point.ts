@@ -3,13 +3,16 @@ import { Value } from 'mongu';
 import { mongu } from 'mongu';
 
 import { Position } from '../types/position';
-import { ElementFlow } from './element';
 import { ValueForm, ValueReturn, ValueVariables } from '../types/value';
-
-import { ElementForm, ElementReturn, ElementVariables } from './element';
+import {
+  ElementFlow,
+  ElementForm,
+  ElementReturn,
+  ElementVariables,
+} from './element';
 
 /**
- * This class represents a point in the execution.
+ * This class represents a point in the form.
  */
 class Point {
   public positions: Position[];
@@ -20,36 +23,52 @@ class Point {
     this.variables = variables;
   }
 
-  get currentPosition(): Position {
+  /**
+   * It returns the position of the item.
+   */
+  get itemPosition(): Position {
     return this.positions[this.positions.length - 1];
   }
 
-  get previousPositions(): Position[] {
+  /**
+   * It returns the position of the flow.
+   */
+  get flowPosition(): Position[] {
     return this.positions.slice(0, this.positions.length - 1);
   }
 
+  /**
+   * It creates a point.
+   * @param elementFlow The element flow.
+   * @param positions The positions.
+   * @param variables The variables.
+   * @returns The point.
+   */
   static create(
     elementFlow: ElementFlow,
     positions: Position[],
     variables: { [key: string]: Value } = {}
   ): Point {
     const element = elementFlow.get(positions);
-
-    if (element instanceof ElementForm)
+    if (element instanceof ElementForm) {
       return PointForm.new(element, positions, variables);
-
-    if (element instanceof ElementReturn)
+    }
+    if (element instanceof ElementReturn) {
       return PointReturn.new(element, positions, variables);
-
-    if (element instanceof ElementVariables)
+    }
+    if (element instanceof ElementVariables) {
       return PointVariables.new(element, positions, variables);
-
+    }
     return new Point(positions, variables);
   }
 
-  addVariables(variables: { [key: string]: Value }): Point {
-    const vars = { ...this.variables, ...variables };
-    return new Point(this.positions, vars);
+  /**
+   * It returns a new point with the new variables added.
+   * @param variables The variables.
+   * @returns The point with the new variables added.
+   */
+  add(variables: { [key: string]: Value }): Point {
+    return new Point(this.positions, { ...this.variables, ...variables });
   }
 }
 
@@ -70,18 +89,26 @@ class PointForm extends Point {
     positions: Position[],
     variables: { [key: string]: Value }
   ): PointForm {
-    const value = mongu(element.value, variables) as ValueForm;
-    return new PointForm(value, positions, variables);
+    return new PointForm(
+      mongu(element.value, variables) as ValueForm,
+      positions,
+      variables
+    );
   }
 
   setDefaultValues(values: { [key: string]: Value }) {
-    const value = { ...this.value, defaultValues: values };
-    return new PointForm(value, this.positions, this.variables);
+    return new PointForm(
+      { ...this.value, defaultValues: values },
+      this.positions,
+      this.variables
+    );
   }
 
-  addVariables(variables: { [key: string]: Value }): PointForm {
-    const vars = { ...this.variables, ...variables };
-    return new PointForm(this.value, this.positions, vars);
+  add(variables: { [key: string]: Value }) {
+    return new PointForm(this.value, this.positions, {
+      ...this.variables,
+      ...variables,
+    });
   }
 }
 
@@ -102,13 +129,18 @@ class PointReturn extends Point {
     positions: Position[],
     variables: { [key: string]: Value }
   ): PointReturn {
-    const value = mongu(element.value, variables) as ValueReturn;
-    return new PointReturn(value, positions, variables);
+    return new PointReturn(
+      mongu(element.value, variables) as ValueReturn,
+      positions,
+      variables
+    );
   }
 
-  addVariables(variables: { [key: string]: Value }): PointReturn {
-    const vars = { ...this.variables, ...variables };
-    return new PointReturn(this.value, this.positions, vars);
+  add(variables: { [key: string]: Value }) {
+    return new PointReturn(this.value, this.positions, {
+      ...this.variables,
+      ...variables,
+    });
   }
 }
 
@@ -129,13 +161,18 @@ class PointVariables extends Point {
     positions: Position[],
     variables: { [key: string]: Value }
   ): PointVariables {
-    const value = mongu(element.value, variables) as ValueVariables;
-    return new PointVariables(value, positions, variables);
+    return new PointVariables(
+      mongu(element.value, variables) as ValueVariables,
+      positions,
+      variables
+    );
   }
 
-  addVariables(variables: { [key: string]: Value }): PointVariables {
-    const vars = { ...this.variables, ...variables };
-    return new PointVariables(this.value, this.positions, vars);
+  add(variables: { [key: string]: Value }) {
+    return new PointVariables(this.value, this.positions, {
+      ...this.variables,
+      ...variables,
+    });
   }
 }
 

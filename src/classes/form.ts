@@ -46,7 +46,7 @@ class Form {
   ): [PointForm, StopPoint] {
     const currPoint = point.setDefaultValues(values);
     const nextPoint = this._nextStopPoint(
-      this._nextStepPoint(currPoint.addVariables(values))
+      this._nextStepPoint(currPoint.add(values))
     );
     return [currPoint, nextPoint];
   }
@@ -86,7 +86,7 @@ class Form {
 
   _nextPointVariables(point: StepPoint): StepPoint {
     return point instanceof PointVariables
-      ? point.addVariables(point.value as { [key: string]: Value })
+      ? point.add(point.value as { [key: string]: Value })
       : point;
   }
 
@@ -107,9 +107,9 @@ class Form {
   }
 
   _nextPointLevelNext(point: Point): Point | null {
-    const previousPositions = point.previousPositions;
+    const previousPositions = point.flowPosition;
     const elementFlow = this.element.get(previousPositions) as ElementFlow;
-    const currentPosition = point.currentPosition;
+    const currentPosition = point.itemPosition;
     const variables = point.variables;
     const position = Navigate.next(elementFlow, currentPosition, variables);
     if (position !== null) {
@@ -136,7 +136,7 @@ class Form {
   }
 
   _upPoint(point: Point): Point {
-    return Point.create(this.element, point.previousPositions, point.variables);
+    return Point.create(this.element, point.flowPosition, point.variables);
   }
 }
 

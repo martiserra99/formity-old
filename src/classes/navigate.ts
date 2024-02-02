@@ -80,7 +80,7 @@ class NavigateList extends Navigate<ElementList, PositionList> {
 }
 
 /**
- * It defines logic to navigate through a conditional.
+ * It defines logic to navigate through a condition.
  */
 class NavigateCond extends Navigate<ElementCond, PositionCond> {
   protected down(variables: { [key: string]: Value }): PositionCond | null {
