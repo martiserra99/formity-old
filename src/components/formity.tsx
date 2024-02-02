@@ -2,8 +2,6 @@ import React, { useMemo, useState } from 'react';
 
 import { Value } from 'mongu';
 
-import { FormityProps } from '../types/components';
-
 import Form from '../classes/form';
 import { PointForm } from '../classes/point';
 
@@ -11,7 +9,17 @@ import useResolver from '../hooks/formity/use-resolver';
 import useRender from '../hooks/formity/use-render';
 
 import FormityForm from './formity-form';
+import { JsonList } from '../types/json';
 
+export interface FormityProps
+  extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
+  form: JsonList;
+  onSubmit: (data: Value) => void;
+}
+
+/**
+ * It is a component that represents the form that will be rendered from the JSON.
+ */
 function Formity({ form: json, onSubmit, className }: FormityProps) {
   const form = useMemo(() => new Form(json), [json]);
 
@@ -42,8 +50,8 @@ function Formity({ form: json, onSubmit, className }: FormityProps) {
       defaultValues={defaultValues}
       resolver={resolver}
       onSubmit={handleSubmit}
-      className={className}
       onBack={handleBack}
+      className={className}
       key={points.length}
     >
       {render}

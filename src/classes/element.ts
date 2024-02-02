@@ -22,7 +22,7 @@ import {
 /**
  * This class represents a json element.
  */
-export abstract class Element<T extends Json = Json> {
+abstract class Element<T extends Json = Json> {
   protected json: T;
 
   constructor(json: T) {
@@ -48,7 +48,7 @@ export abstract class Element<T extends Json = Json> {
 /**
  * It is an element that contains other elements.
  */
-export abstract class ElementFlow<
+abstract class ElementFlow<
   T extends JsonFlow = JsonFlow,
   U extends Position = Position
 > extends Element<T> {
@@ -70,7 +70,7 @@ export abstract class ElementFlow<
 /**
  * It is an element that represents a list.
  */
-export class ElementList extends ElementFlow<JsonList, PositionList> {
+class ElementList extends ElementFlow<JsonList, PositionList> {
   get length(): number {
     return this.json.length;
   }
@@ -87,7 +87,7 @@ export class ElementList extends ElementFlow<JsonList, PositionList> {
 /**
  * It is an element that represents a condition.
  */
-export class ElementCond extends ElementFlow<JsonCond, PositionCond> {
+class ElementCond extends ElementFlow<JsonCond, PositionCond> {
   get cond() {
     return this.json.cond.if;
   }
@@ -112,7 +112,7 @@ export class ElementCond extends ElementFlow<JsonCond, PositionCond> {
 /**
  * It is an element that represents a loop.
  */
-export class ElementLoop extends ElementFlow<JsonLoop, PositionLoop> {
+class ElementLoop extends ElementFlow<JsonLoop, PositionLoop> {
   get cond() {
     return this.json.loop.while;
   }
@@ -133,16 +133,14 @@ export class ElementLoop extends ElementFlow<JsonLoop, PositionLoop> {
 /**
  * It is an element.
  */
-export abstract class ElementItem<
-  T extends JsonItem = JsonItem
-> extends Element<T> {
+abstract class ElementItem<T extends JsonItem = JsonItem> extends Element<T> {
   abstract get value(): Value;
 }
 
 /**
  * It is an element that represents a form.
  */
-export class ElementForm extends ElementItem<JsonForm> {
+class ElementForm extends ElementItem<JsonForm> {
   get value(): Value {
     return this.json.form;
   }
@@ -155,7 +153,7 @@ export class ElementForm extends ElementItem<JsonForm> {
 /**
  * It is an element that represents a return.
  */
-export class ElementReturn extends ElementItem<JsonReturn> {
+class ElementReturn extends ElementItem<JsonReturn> {
   get value(): Value {
     return this.json.return;
   }
@@ -168,7 +166,7 @@ export class ElementReturn extends ElementItem<JsonReturn> {
 /**
  * It is an element that represents variables.
  */
-export class ElementVariables extends ElementItem<JsonVariables> {
+class ElementVariables extends ElementItem<JsonVariables> {
   get value(): Value {
     return this.json.variables;
   }
@@ -177,3 +175,15 @@ export class ElementVariables extends ElementItem<JsonVariables> {
     return 'variables' in json;
   }
 }
+
+export {
+  Element,
+  ElementFlow,
+  ElementList,
+  ElementCond,
+  ElementLoop,
+  ElementItem,
+  ElementForm,
+  ElementReturn,
+  ElementVariables,
+};

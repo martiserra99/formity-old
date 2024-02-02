@@ -1,7 +1,11 @@
 import { createContext } from 'react';
 
-import { FormityFormContextValue } from '../types/context';
+interface FormityFormContextValue {
+  onBack: () => void;
+}
 
 const FormityFormContext = createContext<FormityFormContextValue | null>(null);
 
 export default FormityFormContext;
+
+export { FormityFormContextValue };

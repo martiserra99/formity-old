@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import { ValueForm } from '../../types/value';
-import { FormityContextValue } from '../../types/context';
+import { FormityContextValue } from '../../context/formity-context';
 
 import useFormity from '../use-formity';
 

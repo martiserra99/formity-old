@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-import { FormityProviderProps } from '../types/components';
+import FormityContext, {
+  FormityContextValue,
+} from '../context/formity-context';
 
-import FormityContext from '../context/formity-context';
+export interface FormityProviderProps {
+  components: FormityContextValue['components'];
+  children: ReactNode;
+}
 
 /**
- * It is the component to provide the context.
+ * It is a component that provides the form components that will be used.
  */
 function FormityProvider({ components, children }: FormityProviderProps) {
   return (
