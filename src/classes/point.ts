@@ -1,7 +1,10 @@
 import { mongu, Value } from 'mongu';
 
+import { isObject } from '../utils';
+
 import { Position } from '../types/position';
 import { ValueForm, ValueReturn, ValueVariables } from '../types/value';
+
 import {
   ElementFlow,
   ElementForm,
@@ -89,11 +92,9 @@ class PointForm extends Point {
     positions: Position[],
     variables: { [key: string]: Value }
   ): PointForm {
-    return new PointForm(
-      mongu(element.value, variables) as ValueForm,
-      positions,
-      variables
-    );
+    const value = mongu(element.value, variables);
+    assertValueForm(value);
+    return new PointForm(value, positions, variables);
   }
 
   setDefaultValues(values: { [key: string]: Value }) {
@@ -110,6 +111,11 @@ class PointForm extends Point {
       ...variables,
     });
   }
+}
+
+function assertValueForm(value: Value): asserts value is ValueForm {
+  if (isObject(value)) return;
+  throw new Error('The form is not valid');
 }
 
 /**
@@ -130,7 +136,7 @@ class PointReturn extends Point {
     variables: { [key: string]: Value }
   ): PointReturn {
     return new PointReturn(
-      mongu(element.value, variables) as ValueReturn,
+      mongu(element.value, variables),
       positions,
       variables
     );
@@ -161,11 +167,16 @@ class PointVariables extends Point {
     positions: Position[],
     variables: { [key: string]: Value }
   ): PointVariables {
-    return new PointVariables(
-      mongu(element.value, variables) as ValueVariables,
-      positions,
-      variables
-    );
+    const value = mongu(element.value, variables);
+    this.assertValueVariables(value);
+    return new PointVariables(value, positions, variables);
+  }
+
+  private static assertValueVariables(
+    value: Value
+  ): asserts value is ValueVariables {
+    if (isObject(value)) return;
+    throw new Error('The form is not valid');
   }
 
   withVariables(variables: { [key: string]: Value }) {

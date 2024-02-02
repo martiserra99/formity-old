@@ -131,7 +131,7 @@ class ElementLoop extends ElementFlow<JsonLoop, PositionLoop> {
 }
 
 /**
- * It is an element.
+ * It is an element that has a value.
  */
 abstract class ElementItem<T extends JsonItem = JsonItem> extends Element<T> {
   abstract get value(): Value;

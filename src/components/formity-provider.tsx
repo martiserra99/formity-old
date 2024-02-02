@@ -1,11 +1,11 @@
 import React, { ReactNode } from 'react';
 
-import FormityContext, {
-  FormityContextValue,
-} from '../context/formity-context';
+import FormityContext from '../context/formity-context';
+
+import { Components } from '../types';
 
 interface FormityProviderProps {
-  components: FormityContextValue['components'];
+  components: Components;
   children: ReactNode;
 }
 

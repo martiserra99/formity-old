@@ -2,14 +2,16 @@ import React, { useMemo, useState } from 'react';
 
 import { Value } from 'mongu';
 
+import { JsonList } from '../types/json';
+
 import Form from '../classes/form';
+
 import { PointForm } from '../classes/point';
 
 import useResolver from '../hooks/formity/use-resolver';
 import useRender from '../hooks/formity/use-render';
 
 import FormityForm from './formity-form';
-import { JsonList } from '../types/json';
 
 interface FormityProps
   extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
@@ -20,7 +22,7 @@ interface FormityProps
 /**
  * It is a component that represents the form that will be rendered from the JSON.
  */
-function Formity({ form: json, onSubmit, className }: FormityProps) {
+function Formity({ form: json, onSubmit, ...props }: FormityProps) {
   const form = useMemo(() => new Form(json), [json]);
 
   const [points, setPoints] = useState(() => [form.initial()]);
@@ -33,9 +35,9 @@ function Formity({ form: json, onSubmit, className }: FormityProps) {
   const render = useRender(value);
 
   function handleSubmit(values: { [key: string]: Value }) {
-    const [currPoint, nextPoint] = form.next(point, values);
+    const [currentPoint, nextPoint] = form.next(point, values);
     if (nextPoint instanceof PointForm) {
-      setPoints([...points.slice(0, -1), currPoint, nextPoint]);
+      setPoints([...points.slice(0, -1), currentPoint, nextPoint]);
       return;
     }
     return onSubmit(nextPoint.value);
@@ -51,8 +53,8 @@ function Formity({ form: json, onSubmit, className }: FormityProps) {
       resolver={resolver}
       onSubmit={handleSubmit}
       onBack={handleBack}
-      className={className}
       key={points.length}
+      {...props}
     >
       {render}
     </FormityForm>

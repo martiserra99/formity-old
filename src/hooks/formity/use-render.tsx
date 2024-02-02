@@ -2,13 +2,13 @@ import React, { ReactElement, isValidElement } from 'react';
 
 import { Value } from 'mongu';
 
+import { isArray, isObject } from '../../utils';
+
+import { Components } from '../../types';
+
 import { ValueForm } from '../../types/value';
 
-import { FormityContextValue } from '../../context/formity-context';
-
 import useFormity from '../use-formity';
-
-type Components = FormityContextValue['components'];
 
 type Render = Value | ReactElement | Render[] | { [key: string]: Render };
 
@@ -48,15 +48,6 @@ function toJSX(value: Value, components: Components, i: number = 0): Render {
 }
 
 /**
- * It returns a boolean indicating if the value is an array.
- * @param value The value to be checked.
- * @returns A boolean indicating if the value is an array.
- */
-function isArray(value: Value): value is Value[] {
-  return Array.isArray(value);
-}
-
-/**
  * It is a function that converts an array to JSX.
  * @param value The value to be converted to JSX.
  * @param components The components to be used.
@@ -64,15 +55,6 @@ function isArray(value: Value): value is Value[] {
  */
 function arrayToJSX(value: Value[], components: Components): Render[] {
   return value.map((item, index) => toJSX(item, components, index));
-}
-
-/**
- * It returns a boolean indicating if the value is an object.
- * @param value The value to be checked.
- * @returns A boolean indicating if the value is an object.
- */
-function isObject(value: Value): value is { [key: string]: Value } {
-  return typeof value === 'object' && !Array.isArray(value) && value !== null;
 }
 
 /**
@@ -122,7 +104,7 @@ function componentToJSX(
     if (isObject(object)) {
       const props = objectToJSX(object, components);
       if (!isValidElement(props)) {
-        return <Component {...{ ...props, key: i }} />;
+        return <Component {...props} key={i} />;
       }
     }
     throw new Error(`The component ${key} is not well formatted.`);

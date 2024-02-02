@@ -1,7 +1,9 @@
-import { createContext, ElementType } from 'react';
+import { createContext } from 'react';
+
+import { Components } from '../types';
 
 interface FormityContextValue {
-  components: { [key: string]: ElementType };
+  components: Components;
 }
 
 const FormityContext = createContext<FormityContextValue | null>(null);
