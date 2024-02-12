@@ -37,11 +37,11 @@ function toElementList(value: Value, components: Components): ReactElement[] {
 
 /**
  * It is a function that checks if the value is an element list.
- * @param render The JSX.
+ * @param jsx The JSX.
  * @returns A boolean indicating if the value is an element list.
  */
-function isElementList(render: JSX): render is ReactElement[] {
-  return Array.isArray(render) && render.every(item => isValidElement(item));
+function isElementList(jsx: JSX): jsx is ReactElement[] {
+  return Array.isArray(jsx) && jsx.every(item => isValidElement(item));
 }
 
 /**
