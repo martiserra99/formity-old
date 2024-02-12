@@ -11,28 +11,37 @@ import { ValueForm } from '../../types/value';
 
 import useFormity from '../use-formity';
 
-type Render = Value | ReactElement | Render[] | { [key: string]: Render };
+type JSX = Value | ReactElement | JSX[] | { [key: string]: JSX };
 
 /**
- * It is a hook that returns the React element of the form.
+ * It is a hook that returns the React element list of the form.
  * @param form The form to be rendered.
- * @returns The React element of the form.
+ * @returns The React element list of the form.
  */
-function useRender(form: ValueForm): ReactElement {
+function useRender(form: ValueForm): ReactElement[] {
   const { components } = useFormity();
-  return toElement(form.render, components);
+  return toElementList(form.render, components);
 }
 
 /**
- * It is a function that converts a value to an element.
- * @param value The value to be converted to an element.
+ * It is a function that converts a value to an element list.
+ * @param value The value to be converted to an element list.
  * @param components The components to be used.
- * @returns The element.
+ * @returns The element list.
  */
-function toElement(value: Value, components: Components): ReactElement {
+function toElementList(value: Value, components: Components): ReactElement[] {
   const jsx = toJSX(value, components);
-  if (React.isValidElement(jsx)) return jsx;
+  if (isElementList(jsx)) return jsx;
   throw new NotValidFormError();
+}
+
+/**
+ * It is a function that checks if the value is an element list.
+ * @param render The JSX.
+ * @returns A boolean indicating if the value is an element list.
+ */
+function isElementList(render: JSX): render is ReactElement[] {
+  return Array.isArray(render) && render.every(item => isValidElement(item));
 }
 
 /**
@@ -42,7 +51,7 @@ function toElement(value: Value, components: Components): ReactElement {
  * @param i The index of the element.
  * @returns The JSX.
  */
-function toJSX(value: Value, components: Components, i: number = 0): Render {
+function toJSX(value: Value, components: Components, i: number = 0): JSX {
   if (isArray(value)) return arrayToJSX(value, components);
   if (isObject(value)) return objectToJSX(value, components, i);
   return value;
@@ -54,7 +63,7 @@ function toJSX(value: Value, components: Components, i: number = 0): Render {
  * @param components The components to be used.
  * @returns The JSX.
  */
-function arrayToJSX(value: Value[], components: Components): Render[] {
+function arrayToJSX(value: Value[], components: Components): JSX[] {
   return value.map((item, index) => toJSX(item, components, index));
 }
 
@@ -69,7 +78,7 @@ function objectToJSX(
   value: { [key: string]: Value },
   components: Components,
   i: number = 0
-): ReactElement | { [key: string]: Render } {
+): ReactElement | { [key: string]: JSX } {
   if (isComponent(value)) return componentToJSX(value, components, i);
   return Object.fromEntries(
     Object.entries(value).map(([key, value]) => [key, toJSX(value, components)])
