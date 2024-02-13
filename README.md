@@ -17,7 +17,7 @@ Formity depends on two packages, [Mongu](https://martiserra.me/mongu) and [React
 To install this package you have to run the following command.
 
 ```shell
-npm install formity
+npm install formity react-hook-form mongu
 ```
 
 ## Documentation
