@@ -29,8 +29,8 @@ function useRender(form: ValueForm): ReactElement[] {
  * @param components The components to be used.
  * @returns The element list.
  */
-function toElementList(value: Value, components: Components): ReactElement[] {
-  const jsx = toJSX(value, components);
+function toElementList(value: Value[], components: Components): ReactElement[] {
+  const jsx = arrayToJSX(value, components);
   if (isElementList(jsx)) return jsx;
   throw new NotValidFormError();
 }
@@ -40,8 +40,8 @@ function toElementList(value: Value, components: Components): ReactElement[] {
  * @param jsx The JSX.
  * @returns A boolean indicating if the value is an element list.
  */
-function isElementList(jsx: JSX): jsx is ReactElement[] {
-  return Array.isArray(jsx) && jsx.every(item => isValidElement(item));
+function isElementList(jsx: JSX[]): jsx is ReactElement[] {
+  return jsx.every(item => isValidElement(item));
 }
 
 /**

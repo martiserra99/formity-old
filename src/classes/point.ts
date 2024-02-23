@@ -125,6 +125,7 @@ class PointForm extends Point {
 
   private static assertValueFormRender(value: { [key: string]: Value }) {
     if (!('render' in value)) throw new NotValidFormError();
+    if (!isArray(value.render)) throw new NotValidFormError();
   }
 
   setDefaultValues(values: { [key: string]: Value }) {
