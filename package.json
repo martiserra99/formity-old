@@ -1,5 +1,5 @@
 {
-  "version": "3.0.1",
+  "version": "3.0.2",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -21,7 +21,8 @@
   },
   "peerDependencies": {
     "react": ">=16",
-    "react-hook-form": "^7.0.0"
+    "react-hook-form": "^7.0.0",
+    "mongu": "^3.0.0"
   },
   "husky": {
     "hooks": {
@@ -72,8 +73,5 @@
     "tsdx": "^0.14.1",
     "tslib": "^2.6.2",
     "typescript": "^5.3.2"
-  },
-  "dependencies": {
-    "mongu": "^3.0.2"
   }
 }
