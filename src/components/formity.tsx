@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Value } from 'mongu';
 
@@ -17,7 +17,7 @@ interface FormityProps
   extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   form: JsonList;
   onSubmit: (data: Value) => void;
-  onSubmitError?: (error: unknown) => void;
+  onError: () => void;
 }
 
 /**
@@ -26,7 +26,7 @@ interface FormityProps
 function Formity({
   form: json,
   onSubmit,
-  onSubmitError,
+  onError = () => {},
   ...props
 }: FormityProps) {
   const form = useMemo(() => new Form(json), [json]);
@@ -40,6 +40,16 @@ function Formity({
   const resolver = useResolver(value);
   const render = useRender(value);
 
+  useEffect(() => {
+    if (resolver === null || render === null) {
+      onError();
+    }
+  }, []);
+
+  if (resolver === null || render === null) {
+    return null;
+  }
+
   function handleSubmit(values: { [key: string]: Value }) {
     try {
       const [currentPoint, nextPoint] = form.next(point, values);
@@ -48,8 +58,8 @@ function Formity({
         return;
       }
       return onSubmit(nextPoint.value);
-    } catch (error) {
-      onSubmitError?.(error);
+    } catch {
+      onError();
     }
   }
 
