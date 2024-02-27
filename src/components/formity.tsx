@@ -17,12 +17,18 @@ interface FormityProps
   extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   form: JsonList;
   onSubmit: (data: Value) => void;
+  onSubmitError?: (error: unknown) => void;
 }
 
 /**
  * It is a component that represents the form that will be rendered from the JSON.
  */
-function Formity({ form: json, onSubmit, ...props }: FormityProps) {
+function Formity({
+  form: json,
+  onSubmit,
+  onSubmitError,
+  ...props
+}: FormityProps) {
   const form = useMemo(() => new Form(json), [json]);
 
   const [points, setPoints] = useState(() => [form.initial()]);
@@ -35,12 +41,16 @@ function Formity({ form: json, onSubmit, ...props }: FormityProps) {
   const render = useRender(value);
 
   function handleSubmit(values: { [key: string]: Value }) {
-    const [currentPoint, nextPoint] = form.next(point, values);
-    if (nextPoint instanceof PointForm) {
-      setPoints([...points.slice(0, -1), currentPoint, nextPoint]);
-      return;
+    try {
+      const [currentPoint, nextPoint] = form.next(point, values);
+      if (nextPoint instanceof PointForm) {
+        setPoints([...points.slice(0, -1), currentPoint, nextPoint]);
+        return;
+      }
+      return onSubmit(nextPoint.value);
+    } catch (error) {
+      onSubmitError?.(error);
     }
-    return onSubmit(nextPoint.value);
   }
 
   function handleBack() {
