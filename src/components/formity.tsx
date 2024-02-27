@@ -44,7 +44,7 @@ function Formity({
     if (resolver === null || render === null) {
       onError();
     }
-  }, []);
+  }, [resolver, render]);
 
   if (resolver === null || render === null) {
     return null;
