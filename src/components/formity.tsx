@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Value } from 'mongu';
 
@@ -13,22 +13,18 @@ import useRender from '../hooks/formity/use-render';
 
 import FormityForm from './formity-form';
 
+import { NotValidFormError } from '../error';
+
 interface FormityProps
   extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   form: JsonList;
   onSubmit: (data: Value) => void;
-  onError: () => void;
 }
 
 /**
  * It is a component that represents the form that will be rendered from the JSON.
  */
-function Formity({
-  form: json,
-  onSubmit,
-  onError = () => {},
-  ...props
-}: FormityProps) {
+function Formity({ form: json, onSubmit, ...props }: FormityProps) {
   const form = useMemo(() => new Form(json), [json]);
 
   const [points, setPoints] = useState(() => [form.initial()]);
@@ -40,15 +36,9 @@ function Formity({
   const resolver = useResolver(value);
   const render = useRender(value);
 
-  useEffect(() => {
-    if (resolver === null || render === null) {
-      onError();
-    }
-  }, [resolver, render]);
+  const [error, setError] = useState(false);
 
-  if (resolver === null || render === null) {
-    return null;
-  }
+  if (error) throw new NotValidFormError();
 
   function handleSubmit(values: { [key: string]: Value }) {
     try {
@@ -59,12 +49,16 @@ function Formity({
       }
       return onSubmit(nextPoint.value);
     } catch {
-      onError();
+      setError(true);
     }
   }
 
   function handleBack() {
-    setPoints(points.slice(0, points.length - 1));
+    try {
+      setPoints(points.slice(0, points.length - 1));
+    } catch {
+      setError(true);
+    }
   }
 
   return (

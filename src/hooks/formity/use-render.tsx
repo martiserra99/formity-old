@@ -18,13 +18,9 @@ type JSX = Value | ReactElement | JSX[] | { [key: string]: JSX };
  * @param form The form to be rendered.
  * @returns The React element list of the form.
  */
-function useRender(form: ValueForm): ReactElement[] | null {
-  try {
-    const { components } = useFormity();
-    return toElementList(form.render, components);
-  } catch {
-    return null;
-  }
+function useRender(form: ValueForm): ReactElement[] {
+  const { components } = useFormity();
+  return toElementList(form.render, components);
 }
 
 /**
